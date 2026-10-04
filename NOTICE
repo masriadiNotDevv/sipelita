@@ -1,0 +1,15 @@
+NOTICE
+
+This project uses third-party open source software components. The following components are included:
+
+- Material Symbols / Google Icons
+  - Licensed under the Apache License, Version 2.0 (http://www.apache.org/licenses/LICENSE-2.0)
+  - Copyright (c) Google LLC
+  - Source: https://fonts.google.com/icons
+
+- Google Fonts
+  - Some fonts are licensed under the SIL Open Font License (OFL) or Apache 2.0. Refer to individual font licenses at https://fonts.google.com/attribution
+
+Unless otherwise noted, all trademarks and logos are the property of their respective owners.
+
+For full license texts, see THIRD-PARTY-LICENSES.md / ATTRIBUTIONS.md.
