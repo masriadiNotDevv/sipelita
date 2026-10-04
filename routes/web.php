@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\StaffController as AdminStaffController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Mahasiswa\DashboardController as MahasiswaDashboardController;
 use App\Http\Controllers\ProfileController;
@@ -16,6 +17,11 @@ Route::middleware('auth')->group(function (): void {
 
     Route::middleware('role:admin')->group(function (): void {
         Route::get('/admin/dashboard', AdminDashboardController::class)->name('admin.dashboard');
+
+        Route::resource('admin/staff', AdminStaffController::class)
+            ->parameters(['admin/staff' => 'staff'])
+            ->except(['show'])
+            ->names('admin.staff');
     });
 
     Route::middleware('role:staff')->group(function (): void {

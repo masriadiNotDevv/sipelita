@@ -20,6 +20,7 @@
 - [x] `PROMPTS.md` - dokumentasi prompt
 - [x] `ARCHITECTURE.md` - arsitektur & struktur
 - [x] `README.md` - deskripsi, instalasi, lisensi
+- [x] `CHANGELOG.md` - riwayat perubahan per versi
 - [ ] Screenshot UI (minimal 3-5)
 - [ ] Deskripsi Ciptaan untuk DJKI (PDF)
 
@@ -28,8 +29,15 @@
 - [x] `NOTICE` 
 - [x] `ATTRIBUTIONS.md`
 - [x] Daftar dependensi lengkap (`composer.json`, `package.json`)
-- [ ] Cek tidak ada dependensi Copyleft (GPL/AGPL)
-- [ ] Hanya aset berlisensi gratis (Google Fonts/Icons) yang dipakai
+- [ ] Cek tidak ada dependensi Copyleft (GPL/AGPL) - MySQL dicatat sebagai
+      perangkat lunak basis data terpisah, tidak dibundle dalam repo
+- [x] Hanya aset berlisensi gratis (Google Fonts/Icons) yang dipakai
+      - Inter: SIL OFL 1.1
+      - Material Symbols Outlined: Apache 2.0
+- [ ] Tambahkan `THIRD-PARTY-LICENSES.md` berisi teks lisensi lengkap
+- [ ] Hapus dependensi basi: `@tailwindcss/vite` terpasang namun tidak dipakai
+- [ ] `npm audit` masih melaporkan 5 vulnerability high pada transitive
+      dependency Tailwind v3 (`braces`, `micromatch`, `fast-glob`)
 
 ## D. Data DJKI
 - [ ] Nama lengkap pencipta sesuai KTP

@@ -16,14 +16,17 @@ SIPELITA bertujuan untuk memfasilitasi proses pelaporan fasilitas kampus secara 
 - [Google Fonts](https://fonts.google.com/) - Web Fonts
 - [Google Icons / Material Symbols](https://fonts.google.com/icons) - Icon System
 
-## Fitur (Rencana)
-- Autentikasi & Manajemen Pengguna
+## Fitur
+- Autentikasi & manajemen profil (login, register, verifikasi email, reset password)
 - Role: `admin`, `staff`, `mahasiswa`
 - Dashboard berdasarkan role
-- Form Pelaporan Fasilitas
-- Tracking Status Laporan
-- Manajemen Laporan & Tanggapan
-- Master Data (Kategori, Fasilitas, Lokasi)
+- Kelola staff (admin): tambah, edit, hapus, dan pencarian akun staff/admin
+- Kedepan: Form Pelaporan Fasilitas
+- Kedepan: Tracking Status Laporan
+- Kedepan: Manajemen Laporan & Tanggapan
+- Kedepan: Master Data (Kategori, Fasilitas, Lokasi)
+
+Rincian perubahan tersedia pada `CHANGELOG.md`.
 
 ## Persyaratan Sistem
 - PHP >= 8.4
@@ -65,9 +68,9 @@ DB_USERNAME=root
 DB_PASSWORD=
 ```
 
-6. Jalankan migration
+6. Jalankan migration beserta data awal
 ```bash
-php artisan migrate
+php artisan migrate --seed
 ```
 
 7. Jalankan aplikasi (dev)
@@ -75,9 +78,45 @@ php artisan migrate
 composer run dev
 ```
 
+## Akun Awal
+
+`php artisan migrate --seed` membuat satu akun untuk setiap peran. Kredensial
+default dapat dioverride melalui environment variable (lihat `config/sipelita.php`).
+
+| Peran | Email | Password |
+|---|---|---|
+| admin | `admin@sipelita.test` | `password123` |
+| staff | `staff@sipelita.test` | `password123` |
+| mahasiswa | `mahasiswa@sipelita.test` | `password123` |
+
+Kredensial di atas **hanya untuk pengembangan**. Untuk produksi, isi nilainya
+melalui `.env`:
+
+```env
+SIPELITA_DEMO_ENABLED=false
+SIPELITA_ADMIN_EMAIL=admin@kampus.test
+SIPELITA_ADMIN_PASSWORD=<password-kuat>
+SIPELITA_STAFF_PASSWORD=<password-kuat>
+SIPELITA_MAHASISWA_PASSWORD=<password-kuat>
+```
+
+Seeder bersifat idempoten, sehingga `php artisan db:seed` dapat dijalankan ulang
+tanpa menghasilkan akun duplikat.
+
+Untuk membuat staff baru, gunakan halaman **Kelola Staff** di dashboard admin
+(`/admin/staff`) alih-alih menambahkannya lewat seeder.
+
+## Pengujian
+```bash
+php artisan test
+vendor/bin/pint
+```
+
 ## Lisensi
 
-Proyek ini dilisensikan di bawah [MIT License](./LICENSE).
+Proyek ini dilisensikan di bawah [MIT License](./LICENSE). Daftar dependensi
+pihak ketiga beserta lisensinya ada di [ATTRIBUTIONS.md](./ATTRIBUTIONS.md) dan
+[NOTICE](./NOTICE).
 
 Copyright (c) 2026 Masriadi, Nurul Aulia, Nadia, Nuri Zilvani, Elsariani, Jona Irwansyah, Irsan.
 

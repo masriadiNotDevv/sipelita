@@ -48,6 +48,18 @@ enum UserRole: string
     }
 
     /**
+     * Kelas warna Tailwind untuk badge peran.
+     */
+    public function badgeClass(): string
+    {
+        return match ($this) {
+            self::Admin => 'bg-brand-100 text-brand-800',
+            self::Staff => 'bg-sky-100 text-sky-800',
+            self::Mahasiswa => 'bg-emerald-100 text-emerald-800',
+        };
+    }
+
+    /**
      * Nama rute dashboard peran.
      */
     public function dashboardRoute(): string

@@ -3,6 +3,7 @@
     $authUser = auth()->user();
     $userRole = $authUser?->userRole();
     $dashboardPath = $userRole?->dashboardPath() ?? route('home');
+    $isAdmin = $userRole === \App\Enums\UserRole::Admin;
 @endphp
 
 <nav x-data="{ open: false, profileOpen: false }" class="border-b border-gray-200 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80">
@@ -32,6 +33,14 @@
                             <span class="material-symbols-outlined !text-lg">{{ $userRole->icon() }}</span>
                             Dashboard {{ $userRole->label() }}
                         </a>
+
+                        @if ($isAdmin)
+                            <a href="{{ route('admin.staff.index') }}"
+                                class="nav-link {{ request()->routeIs('admin.staff.*') ? 'nav-link-active' : '' }}">
+                                <span class="material-symbols-outlined !text-lg">group</span>
+                                Kelola Staff
+                            </a>
+                        @endif
                     @endauth
                 </div>
             </div>
@@ -110,6 +119,14 @@
                     <span class="material-symbols-outlined !text-lg">{{ $userRole->icon() }}</span>
                     Dashboard {{ $userRole->label() }}
                 </a>
+
+                @if ($isAdmin)
+                    <a href="{{ route('admin.staff.index') }}"
+                        class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50 {{ request()->routeIs('admin.staff.*') ? 'nav-link-active' : '' }}">
+                        <span class="material-symbols-outlined !text-lg">group</span>
+                        Kelola Staff
+                    </a>
+                @endif
             @endauth
         </div>
 
