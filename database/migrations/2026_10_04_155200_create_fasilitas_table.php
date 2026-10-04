@@ -13,7 +13,13 @@ return new class extends Migration
     {
         Schema::create('fasilitas', function (Blueprint $table) {
             $table->id();
+            $table->string('nama');
+            $table->string('lokasi');
+            $table->string('gedung')->nullable();
+            $table->string('lantai')->nullable();
             $table->timestamps();
+
+            $table->index(['lokasi', 'nama']);
         });
     }
 

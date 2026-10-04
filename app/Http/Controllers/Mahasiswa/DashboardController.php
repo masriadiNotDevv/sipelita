@@ -3,63 +3,28 @@
 namespace App\Http\Controllers\Mahasiswa;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use Illuminate\Contracts\View\View;
 
 class DashboardController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Tampilkan dashboard mahasiswa.
      */
-    public function index()
+    public function __invoke(): View
     {
-        //
-    }
+        $laporans = auth()->user()->laporans();
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return view('mahasiswa.dashboard', [
+            'totalLaporan' => (clone $laporans)->count(),
+            'laporanMenunggu' => (clone $laporans)->where('status', 'menunggu')->count(),
+            'laporanDiproses' => (clone $laporans)->where('status', 'diproses')->count(),
+            'laporanPerbaikan' => (clone $laporans)->where('status', 'dalam_perbaikan')->count(),
+            'laporanSelesai' => (clone $laporans)->where('status', 'selesai')->count(),
+            'laporanTerbaru' => (clone $laporans)
+                ->with('kategori')
+                ->latest()
+                ->limit(5)
+                ->get(),
+        ]);
     }
 }

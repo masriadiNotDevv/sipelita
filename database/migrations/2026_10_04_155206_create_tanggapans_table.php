@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('tanggapans', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('laporan_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->text('isi');
+            $table->string('status_sebelum')->nullable();
+            $table->string('status_sesudah')->nullable();
             $table->timestamps();
         });
     }

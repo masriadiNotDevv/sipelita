@@ -57,11 +57,11 @@
                 &copy; {{ date('Y') }} SIPELITA. Dibuat oleh Masriadi, Nurul Aulia, Nadia, Nuri Zilvani, Elsariani, Jona Irwansyah, Irsan. Dilisensikan di bawah MIT License.
             </p>
             <div class="flex items-center gap-4 text-sm text-gray-500">
-                <a href="/LICENSE" class="link-brand">Lisensi</a>
-                <span aria-hidden="true">•</span>
-                <a href="/ATTRIBUTIONS.md" class="link-brand">Atribusi</a>
-                <span aria-hidden="true">•</span>
-                <a href="/NOTICE" class="link-brand">Notice</a>
+<a href="https://github.com/masriadiNotDevv/sipelita/blob/main/LICENSE" class="link-brand" rel="noopener noreferrer" target="_blank">Lisensi</a>
+                <span aria-hidden="true">&middot;</span>
+                <a href="https://github.com/masriadiNotDevv/sipelita/blob/main/ATTRIBUTIONS.md" class="link-brand" rel="noopener noreferrer" target="_blank">Atribusi</a>
+                <span aria-hidden="true">&middot;</span>
+                <a href="https://github.com/masriadiNotDevv/sipelita/blob/main/NOTICE" class="link-brand" rel="noopener noreferrer" target="_blank">Notice</a>
             </div>
         </div>
     </div>

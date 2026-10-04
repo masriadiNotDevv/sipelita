@@ -2,64 +2,30 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Models\Kategori;
+use App\Models\Laporan;
+use App\Models\User;
+use Illuminate\Contracts\View\View;
 
 class DashboardController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Tampilkan dashboard admin.
      */
-    public function index()
+    public function __invoke(): View
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return view('admin.dashboard', [
+            'totalLaporan' => Laporan::query()->count(),
+            'laporanDiproses' => Laporan::query()->where('status', 'diproses')->count(),
+            'laporanSelesai' => Laporan::query()->where('status', 'selesai')->count(),
+            'laporanMenunggu' => Laporan::query()->where('status', 'menunggu')->count(),
+            'totalUser' => User::query()->count(),
+            'totalMahasiswa' => User::query()->where('role', UserRole::Mahasiswa->value)->count(),
+            'totalStaff' => User::query()->where('role', UserRole::Staff->value)->count(),
+            'totalKategori' => Kategori::query()->count(),
+            'laporanTerbaru' => Laporan::query()->with(['user', 'kategori'])->latest()->limit(5)->get(),
+        ]);
     }
 }

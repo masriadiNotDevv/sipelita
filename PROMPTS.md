@@ -19,6 +19,11 @@ kira2 dalam merancang app untuk di HAKI kan, apa yg dipersiapkan ?
 ok setiap pembuatan apk harus kamu sertakan apa saja prompt yg saya masukan , dokumentasi struktur app nya ,,buat proyeknya gunakan tailwindcss gunakan styling yg enak dilihat gunakan warna aksen ungu , rolenya ada 3 orang admin, staff, dan mahasiswa, buat tampilan home untuk instruksi lainnya nanti sy tambahkan
 ```
 
+## Prompt 4 - Perbaikan Error Halaman & Akses Per Role
+```
+pastikan semua halaman bisa diakses, dan fix error resources\views\layouts\navigation.blade.php:26 Attempt to read property "name" on null
+```
+
 ## Catatan
 - Seluruh kode dibangun secara orisinal berdasarkan kebutuhan SIPELITA.
 - Tidak menyalin repository, template komersial, atau snippet kode orang lain secara utuh.
