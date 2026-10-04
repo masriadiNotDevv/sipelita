@@ -1,58 +1,92 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# SIPELITA - Sistem Pelaporan Fasilitas Kampus
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+SIPELITA adalah sistem pelaporan fasilitas kampus yang mempermudah mahasiswa, staff dan admin dalam mengelola pelaporan kerusakan atau masalah fasilitas kampus.
 
-## About Laravel
+## Tim Pengembang (Pencipta)
+Masriadi, Nurul Aulia, Nadia, Nuri Zilvani, Elsariani, Jona Irwansyah, Irsan
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Deskripsi
+SIPELITA bertujuan untuk memfasilitasi proses pelaporan fasilitas kampus secara terstruktur, transparan dan terpantau. Mahasiswa dapat membuat laporan, Staff dapat menindaklanjuti, dan Admin dapat mengelola seluruh data sistem.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Teknologi yang Digunakan
+- [Laravel](https://laravel.com/) - PHP Framework
+- [MySQL](https://www.mysql.com/) - Database
+- [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS Framework
+- [Vite](https://vitejs.dev/) - Frontend Tooling
+- [Google Fonts](https://fonts.google.com/) - Web Fonts
+- [Google Icons / Material Symbols](https://fonts.google.com/icons) - Icon System
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Fitur (Rencana)
+- Autentikasi & Manajemen Pengguna
+- Role: `admin`, `staff`, `mahasiswa`
+- Dashboard berdasarkan role
+- Form Pelaporan Fasilitas
+- Tracking Status Laporan
+- Manajemen Laporan & Tanggapan
+- Master Data (Kategori, Fasilitas, Lokasi)
 
-## Learning Laravel
+## Persyaratan Sistem
+- PHP >= 8.4
+- Composer >= 2.x
+- Node.js >= 20.x dan npm >= 10.x
+- MySQL >= 8.0
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Instalasi
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
-
+1. Clone repositori
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+git clone <repo-url> sipe
+cd sipe
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+2. Install dependency PHP
+```bash
+composer install
+```
 
-## Contributing
+3. Install dependency Frontend
+```bash
+npm install
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+4. Konfigurasi environment
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-## Code of Conduct
+5. Konfigurasi database di `.env`
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=sipelita
+DB_USERNAME=root
+DB_PASSWORD=
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+6. Jalankan migration
+```bash
+php artisan migrate
+```
 
-## Security Vulnerabilities
+7. Jalankan aplikasi (dev)
+```bash
+composer run dev
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Lisensi
 
-## License
+Proyek ini dilisensikan di bawah [MIT License](./LICENSE).
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Copyright (c) 2026 Masriadi, Nurul Aulia, Nadia, Nuri Zilvani, Elsariani, Jona Irwansyah, Irsan.
+
+## Atribusi Pihak Ketiga
+
+Lihat [ATTRIBUTIONS.md](./ATTRIBUTIONS.md) dan [NOTICE](./NOTICE) untuk daftar pustaka pihak ketiga beserta lisensinya.
+
+## Dokumentasi HAKI
+
+- [PROMPTS.md](./PROMPTS.md) - Daftar prompt yang digunakan
+- [ARCHITECTURE.md](./ARCHITECTURE.md) - Dokumentasi struktur & arsitektur
+- [BERKAS-HAKI.md](./BERKAS-HAKI.md) - Checklist pengajuan HAKI
