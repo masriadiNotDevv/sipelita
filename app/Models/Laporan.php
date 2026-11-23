@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\PrioritasLaporan;
 use App\Enums\StatusLaporan;
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -136,13 +137,26 @@ class Laporan extends Model
     }
 
     /**
-     * Generate kode laporan berikutnya.
+     * Format kode laporan dari nilai `id` yang dijamin unik.
+     *
+     * Kode diturunkan dari primary key auto-increment, bukan dari penghitungan
+     * baris, sehingga dua laporan yang dibuat bersamaan tidak mungkin
+     * menghasilkan kode yang sama.
      */
-    public static function nextKode(): string
+    public static function formatKode(int $id, ?DateTimeInterface $tanggal = null): string
     {
-        $tahun = now()->format('Y');
-        $jumlah = static::query()->where('kode', 'like', "LAP-{$tahun}-%")->count();
+        $tahun = ($tanggal ?? now())->format('Y');
 
-        return sprintf('LAP-%s-%04d', $tahun, $jumlah + 1);
+        return sprintf('LAP-%s-%04d', $tahun, $id);
+    }
+
+    /**
+     * Isi kode laporan setelah baris memperoleh nilai `id`.
+     */
+    public function isiKode(): void
+    {
+        if ($this->kode === null) {
+            $this->forceFill(['kode' => static::formatKode($this->getKey(), $this->created_at)])->save();
+        }
     }
 }

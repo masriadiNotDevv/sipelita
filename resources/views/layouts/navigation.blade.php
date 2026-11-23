@@ -4,6 +4,7 @@
     $userRole = $authUser?->userRole();
     $dashboardPath = $userRole?->dashboardPath() ?? route('home');
     $isAdmin = $userRole === \App\Enums\UserRole::Admin;
+    $isMahasiswa = $userRole === \App\Enums\UserRole::Mahasiswa;
 @endphp
 
 <nav x-data="{ open: false, profileOpen: false }" class="border-b border-gray-200 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80">
@@ -39,6 +40,14 @@
                                 class="nav-link {{ request()->routeIs('admin.staff.*') ? 'nav-link-active' : '' }}">
                                 <span class="material-symbols-outlined !text-lg">group</span>
                                 Kelola Staff
+                            </a>
+                        @endif
+
+                        @if ($isMahasiswa)
+                            <a href="{{ route('mahasiswa.laporan.index') }}"
+                                class="nav-link {{ request()->routeIs('mahasiswa.laporan.*') ? 'nav-link-active' : '' }}">
+                                <span class="material-symbols-outlined !text-lg">assignment</span>
+                                Laporan Saya
                             </a>
                         @endif
                     @endauth
@@ -125,6 +134,14 @@
                         class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50 {{ request()->routeIs('admin.staff.*') ? 'nav-link-active' : '' }}">
                         <span class="material-symbols-outlined !text-lg">group</span>
                         Kelola Staff
+                    </a>
+                @endif
+
+                @if ($isMahasiswa)
+                    <a href="{{ route('mahasiswa.laporan.index') }}"
+                        class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50 {{ request()->routeIs('mahasiswa.laporan.*') ? 'nav-link-active' : '' }}">
+                        <span class="material-symbols-outlined !text-lg">assignment</span>
+                        Laporan Saya
                     </a>
                 @endif
             @endauth

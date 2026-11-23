@@ -35,10 +35,20 @@
                 <h1 class="text-2xl font-bold tracking-tight text-gray-900">Dashboard Mahasiswa</h1>
                 <p class="mt-1 text-sm text-gray-500">Selamat datang, {{ $user->name }}. Pantau status laporan Anda.</p>
             </div>
-            <span class="badge bg-brand-100 text-brand-800">
-                <span class="material-symbols-outlined !text-base">{{ $user->userRole()->icon() }}</span>
-                {{ $user->userRole()->label() }}
-            </span>
+            <div class="flex flex-wrap items-center gap-3">
+                <a href="{{ route('mahasiswa.laporan.create') }}" class="btn-primary">
+                    <span class="material-symbols-outlined !text-lg">add_circle</span>
+                    Buat Laporan
+                </a>
+                <a href="{{ route('mahasiswa.laporan.index') }}" class="btn-secondary">
+                    <span class="material-symbols-outlined !text-lg">assignment</span>
+                    Laporan Saya
+                </a>
+                <span class="badge bg-brand-100 text-brand-800">
+                    <span class="material-symbols-outlined !text-base">{{ $user->userRole()->icon() }}</span>
+                    {{ $user->userRole()->label() }}
+                </span>
+            </div>
         </div>
     </x-slot>
 
@@ -69,7 +79,10 @@
                         @forelse ($laporanTerbaru as $laporan)
                             <div class="flex flex-wrap items-center justify-between gap-3 py-3">
                                 <div class="min-w-0">
-                                    <p class="truncate text-sm font-semibold text-gray-900">{{ $laporan->judul }}</p>
+                                    <a href="{{ route('mahasiswa.laporan.show', $laporan) }}"
+                                        class="link-brand truncate text-sm font-semibold text-gray-900">
+                                        {{ $laporan->judul }}
+                                    </a>
                                     <p class="text-xs text-gray-500">
                                         {{ $laporan->kode }} &middot; {{ $laporan->kategori?->nama ?? 'Umum' }} &middot; {{ $laporan->tanggal_pendek }}
                                     </p>
@@ -89,6 +102,10 @@
                             <div class="py-10 text-center">
                                 <span class="material-symbols-outlined !text-4xl text-gray-300">report</span>
                                 <p class="mt-2 text-sm text-gray-500">Anda belum mengajukan laporan.</p>
+                                <a href="{{ route('mahasiswa.laporan.create') }}" class="btn-primary mt-4">
+                                    <span class="material-symbols-outlined !text-lg">add_circle</span>
+                                    Buat Laporan Pertama
+                                </a>
                             </div>
                         @endforelse
                     </div>

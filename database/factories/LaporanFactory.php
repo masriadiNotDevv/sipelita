@@ -22,7 +22,6 @@ class LaporanFactory extends Factory
     public function definition(): array
     {
         return [
-            'kode' => Laporan::nextKode(),
             'user_id' => User::factory(),
             'kategori_id' => Kategori::factory(),
             'judul' => rtrim(fake()->sentence(6), '.'),
@@ -31,6 +30,16 @@ class LaporanFactory extends Factory
             'prioritas' => fake()->randomElement(PrioritasLaporan::cases()),
             'status' => StatusLaporan::Menunggu,
         ];
+    }
+
+    /**
+     * Isi kode laporan sesuai format yang dipakai aplikasi.
+     */
+    public function configure(): static
+    {
+        return $this->afterCreating(function (Laporan $laporan): void {
+            $laporan->isiKode();
+        });
     }
 
     /**

@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\StaffController as AdminStaffController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Mahasiswa\DashboardController as MahasiswaDashboardController;
+use App\Http\Controllers\Mahasiswa\LaporanController as MahasiswaLaporanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Staff\DashboardController as StaffDashboardController;
 use Illuminate\Support\Facades\Route;
@@ -30,6 +31,11 @@ Route::middleware('auth')->group(function (): void {
 
     Route::middleware('role:mahasiswa')->group(function (): void {
         Route::get('/mahasiswa/dashboard', MahasiswaDashboardController::class)->name('mahasiswa.dashboard');
+
+        Route::resource('mahasiswa/laporan', MahasiswaLaporanController::class)
+            ->parameters(['mahasiswa/laporan' => 'laporan'])
+            ->only(['index', 'create', 'store', 'show'])
+            ->names('mahasiswa.laporan');
     });
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
