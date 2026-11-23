@@ -109,8 +109,8 @@
                             $keteranganPrioritas = match ($pilihan->value) {
                                 'rendah' => 'Tidak mendesak, masih bisa ditunggu.',
                                 'sedang' => 'Perlu perbaikan dalam waktu dekat.',
-                                'tinggi' => 'Sanggu aktivitas belajar dan mengajar.',
-                                default => 'Menganggu keselamatan penghuni kampus.',
+                                'tinggi' => 'Mengganggu aktivitas belajar dan mengajar.',
+                                default => 'Mengganggu keselamatan penghuni kampus.',
                             };
                         @endphp
                         <label class="flex cursor-pointer items-start gap-3 rounded-xl border border-gray-200 p-4 transition hover:border-brand-400 has-[:checked]:border-brand-500 has-[:checked]:bg-brand-50">

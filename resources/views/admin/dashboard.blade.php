@@ -37,6 +37,10 @@
                 <h1 class="text-2xl font-bold tracking-tight text-gray-900">Dashboard Admin</h1>
                 <p class="mt-1 text-sm text-gray-500">Selamat datang, {{ $user->name }}. Pantau seluruh aktivitas SIPELITA.</p>
             </div>
+            <a href="{{ route('admin.laporan.index') }}" class="btn-secondary">
+                <span class="material-symbols-outlined !text-lg">assignment</span>
+                Kelola Laporan
+            </a>
             <span class="badge bg-brand-100 text-brand-800">
                 <span class="material-symbols-outlined !text-base">{{ $user->userRole()->icon() }}</span>
                 {{ $user->userRole()->label() }}
@@ -71,7 +75,9 @@
                         @forelse ($laporanTerbaru as $laporan)
                             <div class="flex flex-wrap items-center justify-between gap-3 py-3">
                                 <div class="min-w-0">
-                                    <p class="truncate text-sm font-semibold text-gray-900">{{ $laporan->judul }}</p>
+                                    <a href="{{ route('admin.laporan.show', $laporan) }}" class="link-brand truncate text-sm font-semibold">
+                                        {{ $laporan->judul }}
+                                    </a>
                                     <p class="text-xs text-gray-500">
                                         {{ $laporan->kode }} &middot; {{ $laporan->user?->name }} &middot; {{ $laporan->tanggal_pendek }}
                                     </p>

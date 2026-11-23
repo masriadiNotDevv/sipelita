@@ -22,12 +22,16 @@ class RoleMiddleware
             return redirect()->route('login');
         }
 
-        $allowed = array_map(
-            fn (string $role): UserRole => UserRole::from($role),
+        $allowed = array_filter(array_map(
+            fn (string $role): ?UserRole => UserRole::tryFrom($role),
             $roles,
-        );
+        ));
 
-        if ($allowed === [] || $user->hasAnyRole($allowed)) {
+        if ($allowed === []) {
+            abort(Response::HTTP_FORBIDDEN, 'Konfigurasi peran rute tidak valid.');
+        }
+
+        if ($user->hasAnyRole($allowed)) {
             return $next($request);
         }
 

@@ -51,15 +51,82 @@ Ditemukan bahwa tabel `users` masih kosong dan belum ada jalur untuk membuat aku
 bagusnya ada akun untuk admin dan staff , dan buatkan fitur tambah staff , dan catat perubahan dari saya dan prompt saya , dan commit juga
 ```
 
+## Prompt 8 - Implementasi Fitur Pelaporan (ringkasan)
+> Catatan: teks asli tidak tercatat pada fase sebelumnya. Ringkasan berikut
+> berdasarkan perubahan yang diminta dan sudah diverifikasi dari commit.
+
+Buat fitur form pelaporan untuk mahasiswa: daftar laporan dengan pencarian dan
+filter status, form pembuatan laporan dengan validasi serta upload bukti foto,
+halaman detail laporan, pembatasan akses berdasarkan kepemilikan, pengujian, dan
+pencatatan perubahan. Untuk sementara perubahan belum boleh di-commit.
+
+### Tindak Lanjut
+- `Mahasiswa\LaporanController`, `StoreLaporanRequest`, dan `LaporanPolicy`.
+- View `mahasiswa/laporan`, route `mahasiswa.laporan.*`, dan 16 feature test.
+- Kode laporan dihasilkan dari `id` auto-increment melalui `formatKode()`.
+
+## Prompt 9 - Push ke GitHub
+```
+coba push ke github
+```
+
+### Tindak Lanjut
+- Commit `ddbf629` dibuat dan dipush ke `origin/main`.
+- Sebelumnya, saat hanya diminta mengecek koneksi, user memilih "Belum, cukup cek koneksi".
+
+## Prompt 10 - Export Figma dari HTML
+```
+buat saja 1 file html dan isinya kayak canvas figma dan mempunyai page terpisah kayak di figma 1 file html smua page dstu semua tanpa css external hanya internal saja buat skarang
+```
+
+### Tindak Lanjut
+- Dibuat `figma-export/sipelita-canvas.html`.
+- File berisi 17 frame, CSS internal di `<style>`, tanpa CSS/font/script external.
+- Plugin yang dipilih: Refore HTML to Figma (AI-Generated HTML Pages → Select File).
+- File ini masih belum di-commit pada saat dokumentasi ini diperbarui.
+
+## Prompt 11 - Alur Kerja Laporan Staff/Admin dan Notifikasi
+```
+lanjutkan fitur laporan untuk staff dan admin. staff bisa melihat semua laporan dan mengklaim laporan yang belum ditangani, admin bisa mengelola penuh laporan termasuk hapus, tapi hapusnya cukup diarsipkan dengan soft delete dan bisa dipulihkan, jangan force delete. admin juga bisa menugaskan atau mengganti staff penangani. status laporan bebas, semua StatusLaporan boleh dipilih kapan saja, dan selesai_at hanya diisi kalau statusnya Selesai. tambahkan notifikasi database/in-app untuk admin, staff, dan pelapor saat laporan dibuat, diklaim, ditugaskan, diproses/status, diedit, diarsipkan, atau dipulihkan. update catatan alur kerjanya, lalu commit dan push ke origin/main.
+```
+
+### Tindak Lanjut
+Keputusan yang disetujui user dicatat dan dipakai sebagai acuan implementasi:
+- Admin: kelola penuh laporan, termasuk pengarsipan via soft delete dan restore;
+  tidak ada force delete. Staff: melihat semua laporan dan mengklaim yang belum
+  ditangani. Admin: menugaskan atau menugaskan ulang staff penangani.
+- Status laporan bebas (semua `StatusLaporan` valid kapan saja); `selesai_at`
+  hanya diisi saat status `Selesai`.
+- Notifikasi database/in-app untuk admin, staff, dan pelapor pada peristiwa
+  dibuat, diklaim, ditugaskan, diproses/status, diedit, diarsipkan, dipulihkan.
+- Alur kerja dipusatkan di `App\LaporanWorkflow`; notifikasi memakai
+  `App\Notifications\LaporanDiperbarui` dan tabel `notifications`.
+- Matriks izin ada di `LaporanPolicy`; akses rute diperkeras dengan peran dan
+  `UserRole::tryFrom()` pada `RoleMiddleware`.
+- Rute baru: `staff.laporan.index/show/klaim/proses`,
+  `admin.laporan.index/arsip/show/edit/update/destroy/restore/penangani/proses`,
+  dan `notifications.index/read/read-all`.
+- Catatan alur kerja diperbarui di `ARCHITECTURE.md` dan
+  `RIWAYAT-PENGEMBANGAN.md`.
+- Verifikasi yang harus dijalankan sebelum commit: `php artisan migrate --force`,
+  `vendor/bin/pint --dirty --format agent`, `php artisan test --compact`,
+  `npm.cmd run build`; setelah itu `git commit` dan `git push origin main`.
+- Branch `main`; HEAD sebelum pekerjaan ini adalah `ddbf629` dan sudah dipush.
+  Pekerjaan prompt ini masih belum di-commit pada saat prompt dicatat.
+
 ## Ringkasan Perubahan per Prompt
 | Prompt | Perubahan | Commit |
 |---|---|---|
 | 1-3 | Inisialisasi Laravel, dokumentasi HAKI, Lisensi MIT, tema ungu, halaman beranda | `af6808a`, `eddbad1`, `eb4c94d` |
 | 4 | Perbaikan error navigasi, akses berbasis peran, dashboard per role, tema dipulihkan | `c959d51` |
 | 5 | Konfirmasi lisensi open source font & ikon | - |
-| 6-7 | `config/sipelita.php`, `DemoAkunSeeder`, `KategoriFasilitasSeeder`, `StaffController`, form request, route & view `admin/staff`, navigasi admin | lihat `CHANGELOG.md` |
+| 6-7 | `config/sipelita.php`, `DemoAkunSeeder`, `KategoriFasilitasSeeder`, `StaffController`, form request, route & view `admin/staff`, navigasi admin | `4debfc2` |
+| 8 | Form pelaporan mahasiswa, validasi, upload bukti, policy, kode otomatis, dan 16 feature test | `ddbf629` |
+| 9 | Commit dan push ke `origin/main` | `ddbf629` |
+| 10 | Canvas Figma satu file HTML dengan 17 frame dan CSS internal | belum di-commit |
+| 11 | Alur laporan staff/admin, arsip soft delete + restore, notifikasi semua peran/event, pembaruan catatan alur, dan verifikasi sebelum push | belum di-commit; sebelum pekerjaan `ddbf629` |
 
-Detail teknis perubahan dapat dilihat pada `CHANGELOG.md` dan `ARCHITECTURE.md`.
+Detail teknis perubahan dapat dilihat pada `CHANGELOG.md`, `ARCHITECTURE.md`, dan `RIWAYAT-PENGEMBANGAN.md`.
 
 ## Catatan
 - Seluruh kode dibangun secara orisinal berdasarkan kebutuhan SIPELITA.

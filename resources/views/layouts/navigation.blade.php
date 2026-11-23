@@ -4,6 +4,7 @@
     $userRole = $authUser?->userRole();
     $dashboardPath = $userRole?->dashboardPath() ?? route('home');
     $isAdmin = $userRole === \App\Enums\UserRole::Admin;
+    $isStaff = $userRole === \App\Enums\UserRole::Staff;
     $isMahasiswa = $userRole === \App\Enums\UserRole::Mahasiswa;
 @endphp
 
@@ -30,16 +31,29 @@
 
                     @auth
                         <a href="{{ $dashboardPath }}"
-                            class="nav-link {{ request()->is($dashboardPath) ? 'nav-link-active' : '' }}">
+                            class="nav-link {{ request()->routeIs($userRole->dashboardRoute()) ? 'nav-link-active' : '' }}">
                             <span class="material-symbols-outlined !text-lg">{{ $userRole->icon() }}</span>
                             Dashboard {{ $userRole->label() }}
                         </a>
 
                         @if ($isAdmin)
+                            <a href="{{ route('admin.laporan.index') }}"
+                                class="nav-link {{ request()->routeIs('admin.laporan.*') ? 'nav-link-active' : '' }}">
+                                <span class="material-symbols-outlined !text-lg">assignment</span>
+                                Kelola Laporan
+                            </a>
                             <a href="{{ route('admin.staff.index') }}"
                                 class="nav-link {{ request()->routeIs('admin.staff.*') ? 'nav-link-active' : '' }}">
                                 <span class="material-symbols-outlined !text-lg">group</span>
                                 Kelola Staff
+                            </a>
+                        @endif
+
+                        @if ($isStaff)
+                            <a href="{{ route('staff.laporan.index') }}"
+                                class="nav-link {{ request()->routeIs('staff.laporan.*') ? 'nav-link-active' : '' }}">
+                                <span class="material-symbols-outlined !text-lg">assignment</span>
+                                Laporan Masuk
                             </a>
                         @endif
 
@@ -62,6 +76,8 @@
                         Daftar
                     </a>
                 @else
+                    <x-notification-dropdown />
+
                     <div class="relative" @click.outside="profileOpen = false">
                         <button type="button" @click="profileOpen = ! profileOpen"
                             class="flex items-center gap-2 rounded-full py-1 pl-1 pr-3 text-sm font-medium text-gray-700 ring-1 ring-gray-200 transition hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-brand-600">
@@ -124,16 +140,35 @@
 
             @auth
                 <a href="{{ $dashboardPath }}"
-                    class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50 {{ request()->is($dashboardPath) ? 'nav-link-active' : '' }}">
+                    class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50 {{ request()->routeIs($userRole->dashboardRoute()) ? 'nav-link-active' : '' }}">
                     <span class="material-symbols-outlined !text-lg">{{ $userRole->icon() }}</span>
                     Dashboard {{ $userRole->label() }}
                 </a>
 
+                <a href="{{ route('notifications.index') }}"
+                    class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50 {{ request()->routeIs('notifications.*') ? 'nav-link-active' : '' }}">
+                    <span class="material-symbols-outlined !text-lg">notifications</span>
+                    Notifikasi
+                </a>
+
                 @if ($isAdmin)
+                    <a href="{{ route('admin.laporan.index') }}"
+                        class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50 {{ request()->routeIs('admin.laporan.*') ? 'nav-link-active' : '' }}">
+                        <span class="material-symbols-outlined !text-lg">assignment</span>
+                        Kelola Laporan
+                    </a>
                     <a href="{{ route('admin.staff.index') }}"
                         class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50 {{ request()->routeIs('admin.staff.*') ? 'nav-link-active' : '' }}">
                         <span class="material-symbols-outlined !text-lg">group</span>
                         Kelola Staff
+                    </a>
+                @endif
+
+                @if ($isStaff)
+                    <a href="{{ route('staff.laporan.index') }}"
+                        class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50 {{ request()->routeIs('staff.laporan.*') ? 'nav-link-active' : '' }}">
+                        <span class="material-symbols-outlined !text-lg">assignment</span>
+                        Laporan Masuk
                     </a>
                 @endif
 

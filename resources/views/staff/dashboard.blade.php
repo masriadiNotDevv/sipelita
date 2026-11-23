@@ -64,7 +64,9 @@
                 <div class="card lg:col-span-2">
                     <div class="flex items-center justify-between">
                         <div>
-                            <h2 class="text-lg font-semibold text-gray-900">AntrianLaporan</h2>
+                            <h2 class="text-lg font-semibold text-gray-900">
+                                <a href="{{ route('staff.laporan.index') }}" class="link-brand">Antrian Laporan</a>
+                            </h2>
                             <p class="text-sm text-gray-500">Laporan yang menunggu tindakan Anda.</p>
                         </div>
                         <span class="badge bg-amber-100 text-amber-800">{{ $totalDitangani }} ditangani</span>
@@ -74,7 +76,9 @@
                         @forelse ($antrian as $laporan)
                             <div class="flex flex-wrap items-center justify-between gap-3 py-3">
                                 <div class="min-w-0">
-                                    <p class="truncate text-sm font-semibold text-gray-900">{{ $laporan->judul }}</p>
+                                    <a href="{{ route('staff.laporan.show', $laporan) }}" class="link-brand truncate text-sm font-semibold">
+                                        {{ $laporan->judul }}
+                                    </a>
                                     <p class="text-xs text-gray-500">
                                         {{ $laporan->kode }} &middot; {{ $laporan->lokasi }} &middot; {{ $laporan->tanggal_pendek }}
                                     </p>

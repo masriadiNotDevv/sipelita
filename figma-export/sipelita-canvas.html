@@ -1,0 +1,744 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SIPELITA — Canvas Figma</title>
+<style>
+:root{--b50:#faf5ff;--b100:#f3e8ff;--b200:#e9d5ff;--b500:#a855f7;--b600:#9333ea;--b700:#7e22ce;--b800:#6b21a8;--b900:#581c87;--ink:#111827;--muted:#6b7280;--line:#e5e7eb;--bg:#f9fafb}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:Arial,Helvetica,sans-serif;color:var(--ink);background-color:#e5e7eb;background-image:radial-gradient(#c8cdd6 1px,transparent 1px);background-size:22px 22px;font-size:13px;line-height:1.45}
+a{color:inherit;text-decoration:none}
+button,input,select,textarea{font:inherit}
+svg.ico{width:18px;height:18px;flex:none;display:block}
+svg.ico-sm{width:14px;height:14px}
+svg.ico-lg{width:22px;height:22px}
+
+.pages-panel{position:fixed;inset:0 auto 0 0;width:232px;background:#f8f9fb;border-right:1px solid #d6d9df;padding:16px 12px;overflow:auto;z-index:5}
+.panel-head{display:flex;align-items:center;gap:9px;padding:6px 8px 14px;border-bottom:1px solid #e3e6eb;margin-bottom:12px}
+.panel-head .logo-mark{width:28px;height:28px;border-radius:8px;font-size:11px}
+.panel-head strong{font-size:13px}
+.panel-head small{display:block;color:var(--muted);font-size:10px;font-weight:400}
+.group{margin-bottom:14px}
+.group-title{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#8b93a1;padding:4px 8px 6px}
+.page-link{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;color:#374151;font-size:12px}
+.page-link:hover{background:#eef0f4}
+.page-link .num{font-size:10px;color:#9ca3af;width:18px;flex:none}
+.page-link.current{background:var(--b100);color:var(--b800);font-weight:700}
+
+.toolbar{position:fixed;top:0;left:232px;right:0;height:52px;background:#fff;border-bottom:1px solid #d6d9df;display:flex;align-items:center;justify-content:space-between;padding:0 20px;z-index:4}
+.toolbar-left,.toolbar-right{display:flex;align-items:center;gap:10px}
+.crumb{font-size:12px;color:var(--muted)}
+.crumb b{color:var(--ink)}
+.pill{background:#f3f4f6;border:1px solid #e5e7eb;border-radius:999px;padding:4px 10px;font-size:11px;color:#4b5563}
+.avatar-sm{width:26px;height:26px;border-radius:50%;background:var(--b600);color:#fff;display:grid;place-items:center;font-size:10px;font-weight:700}
+
+.canvas{margin-left:232px;padding:84px 60px 140px;display:grid;grid-template-columns:repeat(2,1200px);gap:72px 60px;align-items:start}
+.frame-wrap{width:1200px}
+.frame-label{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px;font-size:12px;font-weight:700;color:#4b5563}
+.frame-label span{font-weight:400;color:#9099a7;font-size:11px}
+.frame{width:1200px;background:var(--bg);border:1px solid #cfd4dc;box-shadow:0 8px 24px rgba(15,23,42,.09);overflow:hidden}
+
+.logo{display:flex;align-items:center;gap:10px}
+.logo-mark{width:38px;height:38px;border-radius:11px;background:var(--b600);color:#fff;display:grid;place-items:center;box-shadow:0 2px 6px rgba(147,51,234,.3)}
+.logo-title{font-size:14px;font-weight:700;letter-spacing:-.02em;line-height:1.1}
+.logo-sub{font-size:9px;color:var(--muted);letter-spacing:.01em}
+
+.nav{height:66px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 32px}
+.nav-left{display:flex;align-items:center}
+.nav-links{display:flex;gap:6px;margin-left:38px}
+.nav-link{padding:8px 12px;border-radius:8px;color:#4b5563;font-size:12px;display:flex;align-items:center;gap:7px}
+.nav-link.on{background:var(--b100);color:var(--b800);font-weight:700}
+.nav-right{display:flex;align-items:center;gap:10px}
+.user-pill{display:flex;align-items:center;gap:8px;padding:4px 10px 4px 4px;border:1px solid var(--line);border-radius:999px;font-size:11px;color:#374151}
+.avatar{width:30px;height:30px;border-radius:50%;background:var(--b600);color:#fff;display:grid;place-items:center;font-size:10px;font-weight:700}
+
+.page-head{background:#fff;border-bottom:1px solid var(--line);padding:22px 32px}
+.page-head h1{font-size:23px;margin:4px 0 3px;letter-spacing:-.02em}
+.page-head p{margin:0;color:var(--muted);font-size:12px}
+.crumbs{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted);margin-bottom:8px}
+.crumbs a{color:var(--b700);font-weight:600}
+.body{padding:26px 32px 32px;min-height:560px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:0 1px 3px rgba(17,24,39,.06)}
+.card+.card{margin-top:20px}
+.card h2{font-size:15px;margin:0 0 4px}
+.card .sub{color:var(--muted);font-size:11px;margin:0}
+.stat{display:flex;align-items:flex-start;justify-content:space-between}
+.stat .label{font-size:11px;color:var(--muted);font-weight:600}
+.stat .value{font-size:28px;font-weight:700;margin-top:7px;letter-spacing:-.03em}
+.stat-icon{width:44px;height:44px;border-radius:12px;display:grid;place-items:center}
+.ic-purple{background:var(--b100);color:var(--b700)}
+.ic-amber{background:#fef3c7;color:#b45309}
+.ic-sky{background:#e0f2fe;color:#0369a1}
+.ic-green{background:#d1fae5;color:#047857}
+.ic-red{background:#fee2e2;color:#b91c1c}
+.ic-gray{background:#f3f4f6;color:#6b7280}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;border-radius:10px;font-size:12px;font-weight:700;border:1px solid transparent;white-space:nowrap}
+.btn-primary{background:var(--b600);color:#fff}
+.btn-secondary{background:#fff;border-color:#d1d5db;color:#374151}
+.btn-ghost{color:#4b5563}
+.btn-danger{background:#dc2626;color:#fff}
+.btn-block{width:100%}
+.btn-sm{padding:7px 11px;font-size:11px}
+
+.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 9px;border-radius:999px;font-size:10px;font-weight:700;white-space:nowrap}
+.b-gray{background:#f3f4f6;color:#4b5563}
+.b-purple{background:var(--b100);color:var(--b800)}
+.b-amber{background:#fef3c7;color:#92400e}
+.b-sky{background:#e0f2fe;color:#075985}
+.b-green{background:#d1fae5;color:#065f46}
+.b-red{background:#fee2e2;color:#991b1b}
+
+.search{display:flex;align-items:center;gap:9px;border:1px solid #d1d5db;background:#fff;border-radius:10px;padding:0 12px;height:40px;min-width:280px}
+.search input{border:0;outline:0;flex:1;font-size:12px;background:transparent}
+.field label{display:block;font-size:11px;font-weight:700;color:#374151;margin-bottom:6px}
+.field label .req{color:#dc2626}
+.field input,.field select,.field textarea{width:100%;border:1px solid #d1d5db;border-radius:10px;background:#fff;padding:10px 12px;font-size:12px;color:var(--ink);outline:0}
+.field textarea{resize:none}
+.hint{font-size:10px;color:#9ca3af;margin-top:4px}
+
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:#6b7280;font-weight:700;padding:10px 12px;border-bottom:1px solid var(--line)}
+td{padding:13px 12px;border-bottom:1px solid #f3f4f6;font-size:12px;vertical-align:middle}
+tr:last-child td{border-bottom:0}
+.row-title{font-weight:700;font-size:12px}
+.row-meta{color:var(--muted);font-size:10px;margin-top:2px}
+
+.list-item{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;padding:15px 0;border-bottom:1px solid #f3f4f6}
+.list-item:last-child{border-bottom:0}
+.list-item h3{font-size:13px;margin:0 0 5px}
+.list-item p{margin:0;color:var(--muted);font-size:11px}
+.meta-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:9px;color:#6b7280;font-size:10px}
+.meta-row span{display:flex;align-items:center;gap:4px}
+.badges{display:flex;gap:6px;flex-wrap:wrap}
+
+.radio-card{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:12px;padding:13px;background:#fff}
+.radio-card.on{border-color:var(--b500);background:var(--b50)}
+.radio-dot{width:15px;height:15px;border-radius:50%;border:1.5px solid #cbd5e1;margin-top:2px;flex:none}
+.radio-dot.on{border:5px solid var(--b600)}
+.radio-card b{font-size:12px;display:flex;align-items:center;gap:6px}
+.radio-card small{color:var(--muted);font-size:10px;display:block;margin-top:3px}
+
+.upload{border:2px dashed #d1d5db;border-radius:12px;background:#f9fafb;padding:30px;text-align:center}
+.upload b{display:block;font-size:12px;margin-top:7px}
+.upload small{color:var(--muted);font-size:10px;display:block;margin-top:3px}
+
+.timeline{list-style:none;margin:16px 0 0;padding:0}
+.timeline li{position:relative;padding-left:26px;padding-bottom:20px}
+.timeline li:before{content:"";position:absolute;left:5px;top:22px;bottom:0;width:2px;background:var(--b100)}
+.timeline li:last-child:before{display:none}
+.timeline .dot{position:absolute;left:0;top:1px;width:12px;height:12px;border-radius:50%;background:var(--b600);border:2px solid #fff;box-shadow:0 0 0 2px var(--b200)}
+.timeline .dot.muted{background:#cbd5e1;box-shadow:0 0 0 2px #f1f5f9}
+.timeline b{font-size:12px}
+.timeline small{display:block;color:var(--muted);font-size:10px;margin-top:2px}
+
+.notice{border-radius:12px;padding:13px 15px;font-size:11px;line-height:1.5}
+.notice-info{background:#eff6ff;color:#1e40af;border:1px solid #dbeafe}
+.notice-ok{background:#ecfdf5;color:#065f46;border:1px solid #d1fae5}
+.notice-warn{background:#fffbeb;color:#92400e;border:1px solid #fde68a}
+.notice-red{background:#fef2f2;color:#991b1b;border:1px solid #fecaca}
+
+.hero{padding:64px 56px;background:radial-gradient(circle at 80% 20%,#c084fc 0,transparent 32%),linear-gradient(135deg,#581c87,#7e22ce 52%,#9333ea);color:#fff;min-height:400px;display:flex;align-items:center;justify-content:space-between;gap:40px}
+.hero h1{font-size:44px;line-height:1.12;margin:12px 0 14px;letter-spacing:-.035em;max-width:620px}
+.hero p{font-size:14px;line-height:1.7;max-width:560px;color:#f3e8ff}
+.hero-card{width:320px;background:#fff;color:var(--ink);border-radius:18px;padding:20px;box-shadow:0 20px 45px rgba(0,0,0,.22)}
+.hero-card .fake-bar{height:7px;border-radius:99px;background:#ede9fe;margin:10px 0}
+.hero-card .fake-bar.s{width:62%}
+.hero-card .fake-bar.m{width:82%}
+
+.auth{display:grid;grid-template-columns:1fr 1fr;background:#fff;min-height:720px}
+.auth-art{background:linear-gradient(155deg,#581c87,#7e22ce 55%,#a855f7);color:#fff;padding:50px;display:flex;flex-direction:column;justify-content:space-between}
+.auth-art h2{font-size:32px;line-height:1.2;max-width:420px;letter-spacing:-.03em}
+.auth-art p{color:#f3e8ff;font-size:13px;line-height:1.7;max-width:400px}
+.auth-form{padding:62px;display:flex;flex-direction:column;justify-content:center}
+.auth-form h1{font-size:26px;margin:0 0 6px;letter-spacing:-.02em}
+.auth-form .lead{color:var(--muted);font-size:12px;margin:0 0 26px}
+.auth-form .field{margin-bottom:16px}
+
+.footer{background:#fff;border-top:1px solid var(--line);padding:26px 32px;color:var(--muted);font-size:10px;display:flex;justify-content:space-between;gap:20px}
+.photo{height:120px;border-radius:12px;background:linear-gradient(135deg,#ddd6fe,#e9d5ff 50%,#f3e8ff);border:1px solid var(--b200);display:grid;place-items:center;color:var(--b700)}
+</style>
+</head>
+<body>
+
+<aside class="pages-panel">
+  <div class="panel-head">
+    <div class="logo-mark"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5"/><path d="M9 13h7M9 17h5"/></svg></div>
+    <div><strong>SIPELITA</strong><small>Design canvas · 17 frame</small></div>
+  </div>
+
+  <div class="group"><div class="group-title">Publik &amp; Auth</div>
+    <a class="page-link current" href="#f01"><span class="num">01</span> Beranda</a>
+    <a class="page-link" href="#f02"><span class="num">02</span> Masuk</a>
+    <a class="page-link" href="#f03"><span class="num">03</span> Daftar</a>
+    <a class="page-link" href="#f04"><span class="num">04</span> Lupa Password</a>
+    <a class="page-link" href="#f05"><span class="num">05</span> Reset Password</a>
+    <a class="page-link" href="#f06"><span class="num">06</span> Verifikasi Email</a>
+    <a class="page-link" href="#f07"><span class="num">07</span> Konfirmasi Password</a>
+  </div>
+  <div class="group"><div class="group-title">Admin</div>
+    <a class="page-link" href="#f08"><span class="num">08</span> Dashboard Admin</a>
+    <a class="page-link" href="#f09"><span class="num">09</span> Kelola Staff</a>
+    <a class="page-link" href="#f10"><span class="num">10</span> Tambah Staff</a>
+    <a class="page-link" href="#f11"><span class="num">11</span> Edit Staff</a>
+  </div>
+  <div class="group"><div class="group-title">Staff</div>
+    <a class="page-link" href="#f12"><span class="num">12</span> Dashboard Staff</a>
+  </div>
+  <div class="group"><div class="group-title">Mahasiswa</div>
+    <a class="page-link" href="#f13"><span class="num">13</span> Dashboard Mahasiswa</a>
+    <a class="page-link" href="#f14"><span class="num">14</span> Laporan Saya</a>
+    <a class="page-link" href="#f15"><span class="num">15</span> Buat Laporan</a>
+    <a class="page-link" href="#f16"><span class="num">16</span> Detail Laporan</a>
+  </div>
+  <div class="group"><div class="group-title">Akun</div>
+    <a class="page-link" href="#f17"><span class="num">17</span> Pengaturan Profil</a>
+  </div>
+</aside>
+
+<header class="toolbar">
+  <div class="toolbar-left">
+    <span class="crumb"><b>SIPELITA</b> / Figma Canvas</span>
+    <span class="pill">17 frame</span>
+  </div>
+  <div class="toolbar-right">
+    <span class="pill">Viewport 1440</span>
+    <span class="pill">CSS internal</span>
+    <div class="avatar-sm">MR</div>
+  </div>
+</header>
+
+<main class="canvas">
+
+<!-- 01 BERANDA -->
+<section class="frame-wrap" id="f01">
+  <div class="frame-label">01 · Beranda <span>1440 × 900</span></div>
+  <div class="frame">
+    <div class="nav">
+      <div class="nav-left">
+        <div class="logo"><div class="logo-mark"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5"/><path d="M9 13h7M9 17h5"/></svg></div><div><div class="logo-title">SIPELITA</div><div class="logo-sub">Sistem Pelaporan Fasilitas Kampus</div></div></div>
+        <div class="nav-links">
+          <a class="nav-link on" href="#f01"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg> Beranda</a>
+          <a class="nav-link" href="#f14">Fitur</a>
+          <a class="nav-link" href="#f14">Alur Pelaporan</a>
+        </div>
+      </div>
+      <div class="nav-right"><a class="btn btn-ghost btn-sm" href="#f02">Masuk</a><a class="btn btn-primary btn-sm" href="#f03"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg> Daftar</a></div>
+    </div>
+    <div class="hero">
+      <div>
+        <span class="badge b-purple" style="background:rgba(255,255,255,.18);color:#fff">SISTEM PELAPORAN FASILITAS KAMPUS</span>
+        <h1>Laporkan masalah fasilitas kampus, tanpa ribet.</h1>
+        <p>SIPELITA memudahkan mahasiswa menyampaikan keluhan, membantu staff menindaklanjuti, dan memberi admin kendali penuh atas seluruh laporan.</p>
+        <div style="display:flex;gap:12px;margin-top:26px">
+          <a class="btn btn-secondary" href="#f03" style="color:#581c87">Mulai Laporkan <svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M14 7l5 5-5 5"/></svg></a>
+          <a class="btn btn-ghost" href="#f14" style="color:#fff">Lihat Alur</a>
+        </div>
+        <div style="display:flex;gap:34px;margin-top:46px">
+          <div><div style="font-size:24px;font-weight:700">3</div><div style="color:#e9d5ff;font-size:10px">Peran pengguna</div></div>
+          <div><div style="font-size:24px;font-weight:700">5</div><div style="color:#e9d5ff;font-size:10px">Status penanganan</div></div>
+          <div><div style="font-size:24px;font-weight:700">100%</div><div style="color:#e9d5ff;font-size:10px">Terpantau</div></div>
+        </div>
+      </div>
+      <div class="hero-card">
+        <div style="display:flex;align-items:center;justify-content:space-between"><b style="font-size:12px">Laporan Terbaru</b><span class="badge b-purple">Diproses</span></div>
+        <div class="fake-bar"></div><div class="fake-bar s"></div>
+        <div style="height:12px"></div>
+        <div class="fake-bar m"></div><div class="fake-bar s"></div>
+        <div style="height:14px"></div>
+        <div style="display:flex;gap:8px"><span class="badge b-amber">Tinggi</span><span class="badge b-gray">Gedung B</span></div>
+      </div>
+    </div>
+    <div style="padding:28px 32px">
+      <div class="grid3">
+        <div class="card"><div class="stat-icon ic-purple"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3h9l4 4v14H6z"/><path d="M9 13h7M9 17h5"/></svg></div><h2 style="margin-top:14px">Lapor Mudah</h2><p class="sub">Form singkat dengan validasi jelas dan bukti foto opsional.</p></div>
+        <div class="card"><div class="stat-icon ic-sky"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><h2 style="margin-top:14px">Status Transparan</h2><p class="sub">Pantau progres dari menunggu hingga selesai.</p></div>
+        <div class="card"><div class="stat-icon ic-green"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 12l5 5L20 6"/></svg></div><h2 style="margin-top:14px">Tindak Lanjut Cepat</h2><p class="sub">Staff menerima antrean laporan dan memberi tanggapan.</p></div>
+      </div>
+    </div>
+    <div class="footer"><span>© 2026 SIPELITA · Dibuat oleh tim SIPELITA · MIT License</span><span>Lisensi · Atribusi · Notice</span></div>
+  </div>
+</section>
+
+<!-- 02 LOGIN -->
+<section class="frame-wrap" id="f02">
+  <div class="frame-label">02 · Masuk <span>1440 × 900</span></div>
+  <div class="frame">
+    <div class="auth">
+      <div class="auth-art">
+        <div class="logo" style="color:#fff"><div class="logo-mark" style="background:rgba(255,255,255,.18)"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5"/></svg></div><div><div class="logo-title">SIPELITA</div><div class="logo-sub" style="color:#e9d5ff">Sistem Pelaporan Fasilitas Kampus</div></div></div>
+        <div><h2>Selamat datang kembali.</h2><p>Masuk untuk mengajukan laporan baru atau memantau status laporan yang sudah Anda kirim.</p></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap"><span class="badge" style="background:rgba(255,255,255,.16);color:#fff">Admin</span><span class="badge" style="background:rgba(255,255,255,.16);color:#fff">Staff</span><span class="badge" style="background:rgba(255,255,255,.16);color:#fff">Mahasiswa</span></div>
+      </div>
+      <div class="auth-form">
+        <h1>Masuk ke akun Anda</h1>
+        <p class="lead">Gunakan email dan kata sandi yang telah terdaftar.</p>
+        <div class="notice notice-ok" style="margin-bottom:18px">Akun demo: <b>mahasiswa@sipelita.test</b> / <b>password123</b></div>
+        <div class="field"><label>Email</label><input value="mahasiswa@sipelita.test"></div>
+        <div class="field"><label>Kata Sandi</label><input type="password" value="password123"></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin:4px 0 22px;font-size:11px"><label style="display:flex;gap:7px;align-items:center;margin:0"><input type="checkbox" style="width:14px;height:14px"> Ingat saya</label><a href="#f04" style="color:var(--b700);font-weight:700">Lupa kata sandi?</a></div>
+        <button class="btn btn-primary btn-block">Masuk</button>
+        <p style="text-align:center;color:var(--muted);font-size:11px;margin-top:20px">Belum punya akun? <a href="#f03" style="color:var(--b700);font-weight:700">Daftar sekarang</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 03 REGISTER -->
+<section class="frame-wrap" id="f03">
+  <div class="frame-label">03 · Daftar <span>1440 × 900</span></div>
+  <div class="frame">
+    <div class="auth">
+      <div class="auth-art">
+        <div class="logo" style="color:#fff"><div class="logo-mark" style="background:rgba(255,255,255,.18)"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h9l4 4v14H6z"/></svg></div><div><div class="logo-title">SIPELITA</div><div class="logo-sub" style="color:#e9d5ff">Sistem Pelaporan Fasilitas Kampus</div></div></div>
+        <div><h2>Mulai dari laporan pertama Anda.</h2><p>Pendaftaran otomatis membuat akun dengan peran mahasiswa. Admin dan staff dibuat melalui menu Kelola Staff.</p></div>
+        <div class="notice" style="background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.2);color:#fff">Pendaftaran baru hanya untuk mahasiswa.</div>
+      </div>
+      <div class="auth-form">
+        <h1>Buat akun baru</h1>
+        <p class="lead">Isi data diri sesuai identitas kampus Anda.</p>
+        <div class="field"><label>Nama Lengkap</label><input value="Nabila Putri"></div>
+        <div class="field"><label>Email</label><input value="nabila@mahasiswa.ac.id"></div>
+        <div class="grid2" style="gap:12px">
+          <div class="field"><label>NIM</label><input value="2023100421"></div>
+          <div class="field"><label>Program Studi</label><input value="Teknik Informatika"></div>
+        </div>
+        <div class="field"><label>Kata Sandi</label><input type="password" value="password123"></div>
+        <div class="field"><label>Konfirmasi Kata Sandi</label><input type="password" value="password123"></div>
+        <button class="btn btn-primary btn-block" style="margin-top:6px">Daftar</button>
+        <p style="text-align:center;color:var(--muted);font-size:11px;margin-top:18px">Sudah punya akun? <a href="#f02" style="color:var(--b700);font-weight:700">Masuk</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 LUPA PASSWORD -->
+<section class="frame-wrap" id="f04">
+  <div class="frame-label">04 · Lupa Password <span>1440 × 900</span></div>
+  <div class="frame">
+    <div class="auth">
+      <div class="auth-art"><div><h2>Pulihkan akses akun Anda.</h2><p>Kami akan mengirim tautan pengaturan ulang kata sandi ke email terdaftar.</p></div></div>
+      <div class="auth-form">
+        <h1>Lupa kata sandi?</h1>
+        <p class="lead">Masukkan email akun SIPELITA Anda.</p>
+        <div class="notice notice-info" style="margin-bottom:18px">Tautan pengaturan ulang berlaku untuk waktu terbatas.</div>
+        <div class="field"><label>Email</label><input value="mahasiswa@sipelita.test"></div>
+        <button class="btn btn-primary btn-block" style="margin-top:18px">Kirim Tautan</button>
+        <p style="text-align:center;margin-top:20px"><a href="#f02" style="color:var(--b700);font-weight:700;font-size:11px">Kembali ke halaman masuk</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 RESET PASSWORD -->
+<section class="frame-wrap" id="f05">
+  <div class="frame-label">05 · Reset Password <span>1440 × 900</span></div>
+  <div class="frame">
+    <div class="auth">
+      <div class="auth-art"><div><h2>Kata sandi baru, akun tetap aman.</h2><p>Gunakan kombinasi huruf, angka, dan simbol agar lebih kuat.</p></div></div>
+      <div class="auth-form">
+        <h1>Atur ulang kata sandi</h1>
+        <p class="lead">Buat kata sandi baru untuk akun Anda.</p>
+        <div class="field"><label>Kata Sandi Baru</label><input type="password" value="rahasia123"></div>
+        <div class="field"><label>Konfirmasi Kata Sandi</label><input type="password" value="rahasia123"></div>
+        <button class="btn btn-primary btn-block" style="margin-top:14px">Simpan Kata Sandi</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 06 VERIFIKASI EMAIL -->
+<section class="frame-wrap" id="f06">
+  <div class="frame-label">06 · Verifikasi Email <span>1440 × 900</span></div>
+  <div class="frame">
+    <div class="auth">
+      <div class="auth-art"><div><h2>Satu langkah lagi.</h2><p>Verifikasi email agar akun Anda sepenuhnya aktif.</p></div></div>
+      <div class="auth-form">
+        <div style="width:54px;height:54px;border-radius:16px;background:var(--b100);color:var(--b700);display:grid;place-items:center;margin-bottom:18px"><svg class="ico-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></div>
+        <h1>Verifikasi alamat email</h1>
+        <p class="lead">Kami sudah mengirim tautan verifikasi ke <b>nabila@mahasiswa.ac.id</b>.</p>
+        <div class="notice notice-warn" style="margin-bottom:18px">Belum menerima email? Periksa folder spam atau kirim ulang tautan.</div>
+        <button class="btn btn-primary btn-block">Kirim Ulang Tautan Verifikasi</button>
+        <button class="btn btn-ghost btn-block" style="margin-top:8px">Keluar</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 07 KONFIRMASI PASSWORD -->
+<section class="frame-wrap" id="f07">
+  <div class="frame-label">07 · Konfirmasi Password <span>1440 × 900</span></div>
+  <div class="frame">
+    <div class="auth">
+      <div class="auth-art"><div><h2>Verifikasi identitas Anda.</h2><p>Halaman ini muncul sebelum aksi sensitif seperti penghapusan akun.</p></div></div>
+      <div class="auth-form">
+        <h1>Konfirmasi kata sandi</h1>
+        <p class="lead">Masukkan kata sandi Anda untuk melanjutkan.</p>
+        <div class="notice notice-info" style="margin-bottom:18px">Ini untuk keamanan akun Anda.</div>
+        <div class="field"><label>Kata Sandi</label><input type="password" value="password123"></div>
+        <button class="btn btn-primary btn-block" style="margin-top:16px">Konfirmasi</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 08 DASHBOARD ADMIN -->
+<section class="frame-wrap" id="f08">
+  <div class="frame-label">08 · Dashboard Admin <span>1440 × 900</span></div>
+  <div class="frame">
+    <div class="nav">
+      <div class="nav-left">
+        <div class="logo"><div class="logo-mark"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5"/></svg></div><div class="logo-title">SIPELITA</div></div>
+        <div class="nav-links">
+          <a class="nav-link" href="#f01">Beranda</a>
+          <a class="nav-link on" href="#f08"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="4" rx="1"/><rect x="14" y="10" width="7" height="11" rx="1"/><rect x="3" y="13" width="7" height="8" rx="1"/></svg> Dashboard Admin</a>
+          <a class="nav-link" href="#f09"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 3-5 6-5s6 2 6 5"/></svg> Kelola Staff</a>
+        </div>
+      </div>
+      <div class="nav-right"><div class="user-pill"><div class="avatar">MR</div> Masriadi <svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></div></div>
+    </div>
+    <div class="page-head">
+      <div class="crumbs"><a href="#f01">Dashboard</a> / Admin</div>
+      <div style="display:flex;justify-content:space-between;align-items:center"><div><h1>Dashboard Admin</h1><p>Selamat datang, Masriadi. Berikut ringkasan seluruh laporan SIPELITA.</p></div><span class="badge b-purple"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l9 4v6c0 5-4 8-9 9-5-1-9-4-9-9V7l9-4z"/></svg> Admin</span></div>
+    </div>
+    <div class="body">
+      <div class="grid4">
+        <div class="card stat"><div><div class="label">Total Laporan</div><div class="value">128</div></div><div class="stat-icon ic-purple"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3h9l4 4v14H6z"/><path d="M9 13h7"/></svg></div></div>
+        <div class="card stat"><div><div class="label">Menunggu</div><div class="value">24</div></div><div class="stat-icon ic-amber"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div></div>
+        <div class="card stat"><div><div class="label">Diproses</div><div class="value">37</div></div><div class="stat-icon ic-sky"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h10M4 17h7"/></svg></div></div>
+        <div class="card stat"><div><div class="label">Selesai</div><div class="value">61</div></div><div class="stat-icon ic-green"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 12l5 5L20 6"/></svg></div></div>
+      </div>
+      <div class="card" style="margin-top:20px">
+        <h2>Laporan Terbaru</h2><p class="sub">Aktivitas terakhir dari seluruh pengguna.</p>
+        <table style="margin-top:14px"><thead><tr><th>Kode</th><th>Judul</th><th>Pelapor</th><th>Prioritas</th><th>Status</th><th>Tanggal</th></tr></thead><tbody>
+          <tr><td><span class="badge b-gray">LAP-2026-0128</span></td><td><div class="row-title">Lampu Koridor Lantai 2 Mati</div><div class="row-meta">Gedung B · Pencahayaan</div></td><td>Nabila Putri</td><td><span class="badge b-red">Tinggi</span></td><td><span class="badge b-amber">Menunggu</span></td><td>05 Okt 2026</td></tr>
+          <tr><td><span class="badge b-gray">LAP-2026-0127</span></td><td><div class="row-title">Keran Wastafel Tidak Mengalir</div><div class="row-meta">Gedung A · Sanitasi</div></td><td>Rizky Ananda</td><td><span class="badge b-sky">Sedang</span></td><td><span class="badge b-sky">Diproses</span></td><td>05 Okt 2026</td></tr>
+          <tr><td><span class="badge b-gray">LAP-2026-0126</span></td><td><div class="row-title">AC Ruang Kelas 3B Berisik</div><div class="row-meta">Gedung C · JK</div></td><td>Sinta Aulia</td><td><span class="badge b-amber">Rendah</span></td><td><span class="badge b-green">Selesai</span></td><td>04 Okt 2026</td></tr>
+        </tbody></table>
+      </div>
+    </div>
+    <div class="footer"><span>© 2026 SIPELITA</span><span>Halaman 8 dari 17</span></div>
+  </div>
+</section>
+
+<!-- 09 KELOLA STAFF -->
+<section class="frame-wrap" id="f09">
+  <div class="frame-label">09 · Kelola Staff <span>1440 × 900</span></div>
+  <div class="frame">
+    <div class="nav">
+      <div class="nav-left"><div class="logo"><div class="logo-mark"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h9l4 4v14H6z"/></svg></div><div class="logo-title">SIPELITA</div></div>
+        <div class="nav-links"><a class="nav-link" href="#f08">Dashboard Admin</a><a class="nav-link on" href="#f09">Kelola Staff</a></div>
+      </div>
+      <div class="nav-right"><div class="user-pill"><div class="avatar">MR</div> Masriadi</div></div>
+    </div>
+    <div class="page-head"><div class="crumbs"><a href="#f08">Dashboard</a> / Kelola Staff</div><h1>Kelola Staff</h1><p>Tambah, ubah, dan kelola akun staff serta admin.</p></div>
+    <div class="body">
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:16px">
+          <div class="search"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M16 16l5 5"/></svg><input placeholder="Cari nama atau email staff..."></div>
+          <a class="btn btn-primary" href="#f10"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg> Tambah Staff</a>
+        </div>
+        <table style="margin-top:18px"><thead><tr><th>Nama</th><th>Email</th><th>Peran</th><th>Dibuat</th><th style="text-align:right">Aksi</th></tr></thead><tbody>
+          <tr><td><div class="row-title">Dewi Anggraini</div><div class="row-meta">Inisial DA</div></td><td>dewistaff@sipelita.test</td><td><span class="badge b-sky">Staff</span></td><td>01 Okt 2026</td><td style="text-align:right"><span class="btn btn-secondary btn-sm">Edit</span> <span class="btn btn-ghost btn-sm" style="color:#dc2626">Hapus</span></td></tr>
+          <tr><td><div class="row-title">Fajar Ramadhan</div><div class="row-meta">Inisial FR</div></td><td>fajarstaff@sipelita.test</td><td><span class="badge b-sky">Staff</span></td><td>02 Okt 2026</td><td style="text-align:right"><a class="btn btn-secondary btn-sm" href="#f11">Edit</a> <span class="btn btn-ghost btn-sm" style="color:#dc2626">Hapus</span></td></tr>
+          <tr><td><div class="row-title">Masriadi</div><div class="row-meta">Inisial MR · Akun Anda</div></td><td>admin@sipelita.test</td><td><span class="badge b-purple">Admin</span></td><td>30 Sep 2026</td><td style="text-align:right"><span class="badge b-gray">Akun sendiri</span></td></tr>
+        </tbody></table>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px;color:var(--muted);font-size:10px"><span>Menampilkan 1–3 dari 3 akun</span><div style="display:flex;gap:6px"><span class="btn btn-secondary btn-sm">Sebelumnya</span><span class="btn btn-secondary btn-sm">1</span><span class="btn btn-secondary btn-sm">Berikutnya</span></div></div>
+      </div>
+    </div>
+    <div class="footer"><span>© 2026 SIPELITA</span><span>Halaman 9 dari 17</span></div>
+  </div>
+</section>
+
+<!-- 10 TAMBAH STAFF -->
+<section class="frame-wrap" id="f10">
+  <div class="frame-label">10 · Tambah Staff <span>1440 × 900</span></div>
+  <div class="frame">
+    <div class="nav"><div class="nav-left"><div class="logo"><div class="logo-mark"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h9l4 4v14H6z"/></svg></div><div class="logo-title">SIPELITA</div></div><div class="nav-links"><a class="nav-link" href="#f09">Kelola Staff</a></div></div></div>
+    <div class="page-head"><div class="crumbs"><a href="#f09">Kelola Staff</a> / Tambah</div><h1>Tambah Staff</h1><p>Buat akun staff baru untuk menangani laporan masuk.</p></div>
+    <div class="body">
+      <div class="grid2" style="grid-template-columns:1fr 330px;align-items:start">
+        <div class="card">
+          <h2>Data Akun</h2><p class="sub">Kata sandi akan disimpan dalam bentuk hash.</p>
+          <div class="grid2" style="gap:16px;margin-top:20px">
+            <div class="field"><label>Nama Lengkap <span class="req">*</span></label><input value="Andi Saputra"></div>
+            <div class="field"><label>Email <span class="req">*</span></label><input value="andi@sipelita.test"></div>
+            <div class="field"><label>Peran <span class="req">*</span></label><select><option>Staff</option><option>Admin</option></select></div>
+            <div class="field"><label>Kata Sandi <span class="req">*</span></label><input type="password" value="rahasia123"></div>
+            <div class="field"><label>Konfirmasi Kata Sandi <span class="req">*</span></label><input type="password" value="rahasia123"></div>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:24px"><button class="btn btn-primary">Simpan Staff</button><a class="btn btn-secondary" href="#f09">Batal</a></div>
+        </div>
+        <div class="card">
+          <h2>Catatan</h2>
+          <div class="notice notice-info" style="margin-top:14px">Akun baru langsung aktif dan dapat login menggunakan email serta kata sandi yang ditentukan.</div>
+          <div class="notice notice-warn" style="margin-top:10px">Peran admin memiliki akses penuh, termasuk mengelola akun staff lain.</div>
+        </div>
+      </div>
+    </div>
+    <div class="footer"><span>© 2026 SIPELITA</span><span>Halaman 10 dari 17</span></div>
+  </div>
+</section>
+
+<!-- 11 EDIT STAFF -->
+<section class="frame-wrap" id="f11">
+  <div class="frame-label">11 · Edit Staff <span>1440 × 900</span></div>
+  <div class="frame">
+    <div class="nav"><div class="nav-left"><div class="logo"><div class="logo-mark"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h9l4 4v14H6z"/></svg></div><div class="logo-title">SIPELITA</div></div><div class="nav-links"><a class="nav-link" href="#f09">Kelola Staff</a></div></div></div>
+    <div class="page-head"><div class="crumbs"><a href="#f09">Kelola Staff</a> / Edit Fajar Ramadhan</div><h1>Edit Staff</h1><p>Perbarui data akun. Kosongkan kata sandi jika tidak ingin mengubahnya.</p></div>
+    <div class="body">
+      <div class="grid2" style="grid-template-columns:1fr 330px;align-items:start">
+        <div class="card">
+          <h2>Data Akun</h2>
+          <div class="grid2" style="gap:16px;margin-top:20px">
+            <div class="field"><label>Nama Lengkap <span class="req">*</span></label><input value="Fajar Ramadhan"></div>
+            <div class="field"><label>Email <span class="req">*</span></label><input value="fajarstaff@sipelita.test"></div>
+            <div class="field"><label>Peran <span class="req">*</span></label><select><option>Staff</option><option>Admin</option></select></div>
+            <div class="field"><label>Kata Sandi Baru <span style="font-weight:400;color:#9ca3af">(opsional)</span></label><input type="password" placeholder="Kosongkan jika tidak diubah"></div>
+            <div class="field"><label>Konfirmasi Kata Sandi</label><input type="password" placeholder="Ulangi kata sandi baru"></div>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:24px"><button class="btn btn-primary">Simpan Perubahan</button><a class="btn btn-secondary" href="#f09">Batal</a></div>
+        </div>
+        <div class="card">
+          <h2>Riwayat Akun</h2>
+          <div class="meta-row" style="flex-direction:column;margin-top:14px"><span>Dibuat: 02 Okt 2026</span><span>Diperbarui: 04 Okt 2026</span><span>Peran saat ini: Staff</span></div>
+          <button class="btn btn-danger btn-block btn-sm" style="margin-top:20px">Hapus Akun</button>
+        </div>
+      </div>
+    </div>
+    <div class="footer"><span>© 2026 SIPELITA</span><span>Halaman 11 dari 17</span></div>
+  </div>
+</section>
+
+<!-- 12 DASHBOARD STAFF -->
+<section class="frame-wrap" id="f12">
+  <div class="frame-label">12 · Dashboard Staff <span>1440 × 900</span></div>
+  <div class="frame">
+    <div class="nav"><div class="nav-left"><div class="logo"><div class="logo-mark"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h9l4 4v14H6z"/></svg></div><div class="logo-title">SIPELITA</div></div><div class="nav-links"><a class="nav-link on" href="#f12"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h10M4 17h7"/></svg> Dashboard Staff</a></div></div><div class="nav-right"><div class="user-pill"><div class="avatar">DA</div> Dewi Anggraini</div></div></div>
+    <div class="page-head"><div class="crumbs"><a href="#f01">Dashboard</a> / Staff</div><div style="display:flex;justify-content:space-between;align-items:center"><div><h1>Dashboard Staff</h1><p>Selamat datang, Dewi. Berikut antrean laporan yang perlu ditindaklanjuti.</p></div><span class="badge b-sky"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg> Staff</span></div></div>
+    <div class="body">
+      <div class="grid4">
+        <div class="card stat"><div><div class="label">Antrean</div><div class="value">24</div></div><div class="stat-icon ic-amber"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div></div>
+        <div class="card stat"><div><div class="label">Diproses</div><div class="value">12</div></div><div class="stat-icon ic-sky"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h10"/></svg></div></div>
+        <div class="card stat"><div><div class="label">Selesai Bulan Ini</div><div class="value">39</div></div><div class="stat-icon ic-green"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 12l5 5L20 6"/></svg></div></div>
+        <div class="card stat"><div><div class="label">Ditolak</div><div class="value">3</div></div><div class="stat-icon ic-red"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 6l12 12M18 6L6 18"/></svg></div></div>
+      </div>
+      <div class="card" style="margin-top:20px"><h2>Antrean Laporan</h2><p class="sub">Prioritas tinggi ditampilkan lebih dulu.</p>
+        <table style="margin-top:14px"><thead><tr><th>Kode</th><th>Judul</th><th>Pelapor</th><th>Prioritas</th><th>Status</th><th>Aksi</th></tr></thead><tbody>
+          <tr><td><span class="badge b-gray">LAP-2026-0128</span></td><td><div class="row-title">Lampu Koridor Lantai 2 Mati</div><div class="row-meta">Gedung B · Pencahayaan</div></td><td>Nabila Putri</td><td><span class="badge b-red">Tinggi</span></td><td><span class="badge b-amber">Menunggu</span></td><td><span class="btn btn-primary btn-sm">Proses</span></td></tr>
+          <tr><td><span class="badge b-gray">LAP-2026-0125</span></td><td><div class="row-title">Kursi Kelas 2A Patah</div><div class="row-meta">Gedung A · Mebel</div></td><td>Dewi Laras</td><td><span class="badge b-sky">Sedang</span></td><td><span class="badge b-amber">Menunggu</span></td><td><span class="btn btn-secondary btn-sm">Proses</span></td></tr>
+        </tbody></table>
+      </div>
+    </div>
+    <div class="footer"><span>© 2026 SIPELITA</span><span>Halaman 12 dari 17</span></div>
+  </div>
+</section>
+
+<!-- 13 DASHBOARD MAHASISWA -->
+<section class="frame-wrap" id="f13">
+  <div class="frame-label">13 · Dashboard Mahasiswa <span>1440 × 900</span></div>
+  <div class="frame">
+    <div class="nav"><div class="nav-left"><div class="logo"><div class="logo-mark"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h9l4 4v14H6z"/></svg></div><div class="logo-title">SIPELITA</div></div><div class="nav-links"><a class="nav-link" href="#f01">Beranda</a><a class="nav-link on" href="#f13"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-5 9 5-9 5-9-5z"/><path d="M7 11v5c0 2 2 3 5 3s5-1 5-3v-5"/></svg> Dashboard Mahasiswa</a><a class="nav-link" href="#f14">Laporan Saya</a></div></div><div class="nav-right"><div class="user-pill"><div class="avatar">NP</div> Nabila Putri</div></div></div>
+    <div class="page-head"><div style="display:flex;justify-content:space-between;align-items:center;gap:16px"><div><h1>Dashboard Mahasiswa</h1><p>Selamat datang, Nabila. Pantau status laporan Anda.</p></div><div style="display:flex;gap:8px;align-items:center"><a class="btn btn-primary btn-sm" href="#f15"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg> Buat Laporan</a><a class="btn btn-secondary btn-sm" href="#f14">Laporan Saya</a><span class="badge b-purple">Mahasiswa</span></div></div></div>
+    <div class="body">
+      <div class="grid4">
+        <div class="card stat"><div><div class="label">Laporan Saya</div><div class="value">7</div></div><div class="stat-icon ic-purple"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3h9l4 4v14H6z"/></svg></div></div>
+        <div class="card stat"><div><div class="label">Menunggu</div><div class="value">2</div></div><div class="stat-icon ic-amber"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div></div>
+        <div class="card stat"><div><div class="label">Diproses</div><div class="value">1</div></div><div class="stat-icon ic-sky"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h10"/></svg></div></div>
+        <div class="card stat"><div><div class="label">Selesai</div><div class="value">4</div></div><div class="stat-icon ic-green"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 12l5 5L20 6"/></svg></div></div>
+      </div>
+      <div class="grid2" style="grid-template-columns:1.6fr 1fr;margin-top:20px">
+        <div class="card"><h2>Laporan Terbaru Saya</h2><p class="sub">Riwayat laporan yang Anda ajukan.</p>
+          <div style="margin-top:12px">
+            <div class="list-item"><div><a class="row-title" href="#f16" style="color:var(--b700)">Lampu Koridor Lantai 2 Mati</a><div class="row-meta">LAP-2026-0007 · Pencahayaan · 05 Okt 2026</div></div><div class="badges"><span class="badge b-red">Tinggi</span><span class="badge b-sky">Diproses</span></div></div>
+            <div class="list-item"><div><div class="row-title">Keran Wastafel Tidak Mengalir</div><div class="row-meta">LAP-2026-0005 · Sanitasi · 02 Okt 2026</div></div><div class="badges"><span class="badge b-sky">Sedang</span><span class="badge b-amber">Menunggu</span></div></div>
+            <div class="list-item"><div><div class="row-title">AC Ruang Kelas 3B Berisik</div><div class="row-meta">LAP-2026-0002 · JK · 28 Sep 2026</div></div><div class="badges"><span class="badge b-gray">Rendah</span><span class="badge b-green">Selesai</span></div></div>
+          </div>
+        </div>
+        <div class="card"><h2>Cara Melapor</h2><p class="sub">Ikuti langkah berikut agar laporan diproses cepat.</p>
+          <ol style="margin:16px 0 0;padding:0;list-style:none">
+            <li style="display:flex;gap:10px;background:#f9fafb;border-radius:10px;padding:11px;margin-bottom:9px"><span style="width:22px;height:22px;border-radius:50%;background:var(--b600);color:#fff;display:grid;place-items:center;font-size:10px;font-weight:700;flex:none">1</span><span style="font-size:11px">Deskripsikan masalah dan tentukan lokasinya.</span></li>
+            <li style="display:flex;gap:10px;background:#f9fafb;border-radius:10px;padding:11px;margin-bottom:9px"><span style="width:22px;height:22px;border-radius:50%;background:var(--b600);color:#fff;display:grid;place-items:center;font-size:10px;font-weight:700;flex:none">2</span><span style="font-size:11px">Unggah bukti foto bila ada.</span></li>
+            <li style="display:flex;gap:10px;background:#f9fafb;border-radius:10px;padding:11px"><span style="width:22px;height:22px;border-radius:50%;background:var(--b600);color:#fff;display:grid;place-items:center;font-size:10px;font-weight:700;flex:none">3</span><span style="font-size:11px">Pantau progres dan tanggapan staff.</span></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="footer"><span>© 2026 SIPELITA</span><span>Halaman 13 dari 17</span></div>
+  </div>
+</section>
+
+<!-- 14 LAPORAN SAYA -->
+<section class="frame-wrap" id="f14">
+  <div class="frame-label">14 · Laporan Saya <span>1440 × 900</span></div>
+  <div class="frame">
+    <div class="nav"><div class="nav-left"><div class="logo"><div class="logo-mark"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h9l4 4v14H6z"/></svg></div><div class="logo-title">SIPELITA</div></div><div class="nav-links"><a class="nav-link" href="#f13">Dashboard</a><a class="nav-link on" href="#f14">Laporan Saya</a></div></div><div class="nav-right"><div class="user-pill"><div class="avatar">NP</div> Nabila Putri</div></div></div>
+    <div class="page-head"><div style="display:flex;justify-content:space-between;align-items:center"><div><div class="crumbs"><a href="#f13">Dashboard</a> / Laporan Saya</div><h1>Laporan Saya</h1><p>Pantau seluruh laporan beserta status penanganannya.</p></div><a class="btn btn-primary" href="#f15"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg> Buat Laporan</a></div></div>
+    <div class="body">
+      <div class="grid4">
+        <div class="card stat"><div><div class="label">Total Laporan</div><div class="value">7</div></div><div class="stat-icon ic-purple"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3h9l4 4v14H6z"/></svg></div></div>
+        <div class="card stat"><div><div class="label">Menunggu</div><div class="value">2</div></div><div class="stat-icon ic-amber"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div></div>
+        <div class="card stat"><div><div class="label">Diproses</div><div class="value">1</div></div><div class="stat-icon ic-sky"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h10"/></svg></div></div>
+        <div class="card stat"><div><div class="label">Selesai</div><div class="value">4</div></div><div class="stat-icon ic-green"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 12l5 5L20 6"/></svg></div></div>
+      </div>
+      <div class="card" style="margin-top:18px;display:flex;gap:12px;align-items:end">
+        <div style="flex:1"><div class="field"><label>Cari Laporan</label><div class="search" style="width:100%"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M16 16l5 5"/></svg><input value="Lampu"></div></div></div>
+        <div style="width:200px" class="field"><label>Status</label><select><option>Semua Status</option><option>Menunggu</option><option>Diproses</option><option>Selesai</option></select></div>
+        <button class="btn btn-secondary">Terapkan</button>
+      </div>
+      <div style="margin-top:18px">
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;gap:18px">
+            <div style="flex:1">
+              <div class="badges"><span class="badge b-gray">LAP-2026-0007</span><span class="badge b-sky">Diproses</span><span class="badge b-red">Tinggi</span></div>
+              <h3 style="font-size:14px;margin:12px 0 5px">Lampu Koridor Lantai 2 Mati</h3>
+              <p class="sub">Lampu koridor lantai 2 tidak menyala sejak tiga hari lalu sehingga gelap saat malam.</p>
+              <div class="meta-row"><span><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h10M4 18h7"/></svg> Pencahayaan</span><span><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s7-6 7-11a7 7 0 1 0-14 0c0 5 7 11 7 11z"/></svg> Gedung B Lantai 2</span><span><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></svg> 05 Okt 2026</span></div>
+            </div>
+            <a class="btn btn-secondary btn-sm" href="#f16">Detail <svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M14 7l5 5-5 5"/></svg></a>
+          </div>
+        </div>
+        <div class="card">
+          <div class="badges"><span class="badge b-gray">LAP-2026-0005</span><span class="badge b-amber">Menunggu</span><span class="badge b-sky">Sedang</span></div>
+          <h3 style="font-size:14px;margin:12px 0 5px">Keran Wastafel Tidak Mengalir</h3>
+          <p class="sub">Keran di wastafel dekat tangga tidak mengeluarkan air sejak pagi.</p>
+        </div>
+      </div>
+    </div>
+    <div class="footer"><span>© 2026 SIPELITA</span><span>Halaman 14 dari 17</span></div>
+  </div>
+</section>
+
+<!-- 15 BUAT LAPORAN -->
+<section class="frame-wrap" id="f15">
+  <div class="frame-label">15 · Buat Laporan <span>1440 × 900</span></div>
+  <div class="frame">
+    <div class="nav"><div class="nav-left"><div class="logo"><div class="logo-mark"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h9l4 4v14H6z"/></svg></div><div class="logo-title">SIPELITA</div></div><div class="nav-links"><a class="nav-link" href="#f14">Laporan Saya</a><a class="nav-link on" href="#f15">Buat Laporan</a></div></div></div>
+    <div class="page-head"><div class="crumbs"><a href="#f14">Laporan Saya</a> / Buat Laporan</div><h1>Buat Laporan</h1><p>Sampaikan keluhan atau kerusakan fasilitas yang Anda temukan.</p></div>
+    <div class="body">
+      <div class="grid2" style="grid-template-columns:1fr 320px;align-items:start">
+        <div>
+          <div class="card"><h2>Informasi Laporan</h2><p class="sub">Isi dengan detail agar staff dapat segera memverifikasi.</p>
+            <div style="margin-top:18px">
+              <div class="field" style="margin-bottom:16px"><label>Judul Laporan <span class="req">*</span></label><input value="Lampu Koridor Lantai 2 Mati"><div class="hint">Minimal 10 karakter · Maksimal 150 karakter</div></div>
+              <div class="field" style="margin-bottom:16px"><label>Deskripsi Masalah <span class="req">*</span></label><textarea rows="5">Lampu koridor lantai 2 tidak menyala sejak tiga hari lalu sehingga gelap saat malam.</textarea><div class="hint">Minimal 20 karakter · Maksimal 2000 karakter</div></div>
+              <div class="field"><label>Lokasi <span class="req">*</span></label><input value="Gedung B Lantai 2 sisi timur"></div>
+            </div>
+          </div>
+          <div class="card"><h2>Kategori &amp; Prioritas</h2><p class="sub">Menentukan jenis layanan dan kecepatan penanganannya.</p>
+            <div class="grid2" style="gap:16px;margin-top:18px">
+              <div class="field"><label>Kategori <span class="req">*</span></label><select><option>Pencahayaan</option><option>Sanitasi</option><option>Mebel</option><option>Jaringan</option></select></div>
+              <div class="field"><label>Fasilitas <span style="font-weight:400;color:#9ca3af">(opsional)</span></label><select><option>Tidak spesifik</option><option>Koridor Gedung B</option></select></div>
+            </div>
+            <div style="margin-top:18px"><label style="display:block;font-size:11px;font-weight:700;margin-bottom:8px">Prioritas <span class="req">*</span></label>
+              <div class="grid2" style="gap:10px">
+                <div class="radio-card"><div class="radio-dot"></div><div><b>Rendah</b><small>Tidak mendesak, masih bisa ditunggu.</small></div></div>
+                <div class="radio-card"><div class="radio-dot"></div><div><b>Sedang</b><small>Perlu perbaikan dalam waktu dekat.</small></div></div>
+                <div class="radio-card"><div class="radio-dot"></div><div><b>Tinggi</b><small>Mengganggu aktivitas belajar dan mengajar.</small></div></div>
+                <div class="radio-card on"><div class="radio-dot on"></div><div><b>Mendesak</b><small>Mengganggu keselamatan penghuni kampus.</small></div></div>
+              </div>
+            </div>
+          </div>
+          <div class="card"><h2>Bukti Foto <span style="font-weight:400;color:#9ca3af">(opsional)</span></h2><p class="sub">Maksimal 2 MB dengan format JPG, PNG, atau WEBP.</p>
+            <div class="upload" style="margin-top:16px"><svg class="ico-lg" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.6" style="margin:0 auto"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M4 18l5-5 4 4 3-3 4 4"/></svg><b>Klik untuk pilih foto</b><small>atau letakkan berkas di sini</small></div>
+          </div>
+        </div>
+        <div class="card" style="position:sticky;top:0">
+          <h2>Ringkasan</h2>
+          <div class="meta-row" style="flex-direction:column;margin-top:16px"><div><div class="label" style="font-size:10px;color:var(--muted)">Pelapor</div><b>Nabila Putri</b></div><div><div class="label" style="font-size:10px;color:var(--muted)">NIM</div><b>2023100421</b></div><div><div class="label" style="font-size:10px;color:var(--muted)">Program Studi</div><b>Teknik Informatika</b></div><div><div class="label" style="font-size:10px;color:var(--muted)">Status Awal</div><span class="badge b-amber">Menunggu</span></div></div>
+          <div class="notice notice-info" style="margin-top:18px"><b>Setelah dikirim</b><br>Laporan masuk antrean staff dan dapat dipantau di halaman Laporan Saya.</div>
+          <button class="btn btn-primary btn-block" style="margin-top:18px"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg> Kirim Laporan</button>
+          <a class="btn btn-secondary btn-block" href="#f14" style="margin-top:8px">Batal</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer"><span>© 2026 SIPELITA</span><span>Halaman 15 dari 17</span></div>
+  </div>
+</section>
+
+<!-- 16 DETAIL LAPORAN -->
+<section class="frame-wrap" id="f16">
+  <div class="frame-label">16 · Detail Laporan <span>1440 × 900</span></div>
+  <div class="frame">
+    <div class="nav"><div class="nav-left"><div class="logo"><div class="logo-mark"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h9l4 4v14H6z"/></svg></div><div class="logo-title">SIPELITA</div></div><div class="nav-links"><a class="nav-link" href="#f14">Laporan Saya</a></div></div></div>
+    <div class="page-head"><div class="crumbs"><a href="#f14">Laporan Saya</a> / LAP-2026-0007</div><div style="display:flex;align-items:center;gap:12px"><h1 style="margin:0">Lampu Koridor Lantai 2 Mati</h1><span class="badge b-sky">Diproses</span></div><p>Diajukan pada 05 Oktober 2026 pukul 09:41</p></div>
+    <div class="body">
+      <div class="notice notice-ok" style="margin-bottom:18px"><b>Laporan LAP-2026-0007 berhasil dikirim</b> dan menunggu ditindaklanjuti.</div>
+      <div class="grid2" style="grid-template-columns:1.5fr 1fr;align-items:start">
+        <div>
+          <div class="card"><h2>Detail Laporan</h2>
+            <div class="grid2" style="gap:16px;margin-top:16px">
+              <div><div style="font-size:10px;color:var(--muted)">Kode Laporan</div><b>LAP-2026-0007</b></div>
+              <div><div style="font-size:10px;color:var(--muted)">Kategori</div><b>Pencahayaan</b></div>
+              <div><div style="font-size:10px;color:var(--muted)">Lokasi</div><b>Gedung B Lantai 2 sisi timur</b></div>
+              <div><div style="font-size:10px;color:var(--muted)">Fasilitas</div><b>Koridor Gedung B</b></div>
+              <div><div style="font-size:10px;color:var(--muted)">Prioritas</div><span class="badge b-red">Tinggi</span></div>
+              <div><div style="font-size:10px;color:var(--muted)">Ditangani Oleh</div><b>Dewi Anggraini</b></div>
+            </div>
+            <div style="border-top:1px solid var(--line);margin-top:18px;padding-top:16px"><b style="font-size:11px">Deskripsi Masalah</b><p style="font-size:12px;line-height:1.6;margin:8px 0 0">Lampu koridor lantai 2 tidak menyala sejak tiga hari lalu sehingga gelap saat malam. Mohon segera diperiksa.</p></div>
+          </div>
+          <div class="card"><h2>Bukti Foto</h2><div class="photo" style="margin-top:14px"><svg class="ico-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M4 18l5-5 4 4 3-3 4 4"/></svg></div></div>
+          <div class="card"><h2>Riwayat Tanggapan</h2>
+            <ol class="timeline">
+              <li><span class="dot"></span><b>Dewi Anggraini</b> <span style="color:var(--muted);font-size:10px">· 05 Okt 2026 11:20</span><div style="font-size:10px;color:var(--muted);margin-top:3px">Status: Menunggu → Diproses</div><p style="font-size:12px;margin:6px 0 0">Terima kasih atas laporannya. Teknisi kami jadwalkan hari ini.</p></li>
+              <li><span class="dot muted"></span><b>Sistem</b> <span style="color:var(--muted);font-size:10px">· 05 Okt 2026 09:41</span><p style="font-size:12px;margin:6px 0 0">Laporan berhasil dibuat dan masuk antrean staff.</p></li>
+            </ol>
+          </div>
+        </div>
+        <div>
+          <div class="card"><h2>Progres Penanganan</h2>
+            <ol class="timeline" style="margin-top:16px">
+              <li><span class="dot muted"></span><b>Menunggu</b><small>Selesai · 05 Okt 09:41</small></li>
+              <li><span class="dot"></span><b>Diproses</b><small>Status saat ini</small></li>
+              <li><span class="dot muted"></span><b>Dalam Perbaikan</b></li>
+              <li><span class="dot muted"></span><b>Selesai</b></li>
+            </ol>
+          </div>
+          <div class="card"><a class="btn btn-secondary btn-block" href="#f14"><svg class="ico-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg> Kembali ke Daftar</a></div>
+        </div>
+      </div>
+    </div>
+    <div class="footer"><span>© 2026 SIPELITA</span><span>Halaman 16 dari 17</span></div>
+  </div>
+</section>
+
+<!-- 17 PROFIL -->
+<section class="frame-wrap" id="f17">
+  <div class="frame-label">17 · Pengaturan Profil <span>1440 × 900</span></div>
+  <div class="frame">
+    <div class="nav"><div class="nav-left"><div class="logo"><div class="logo-mark"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h9l4 4v14H6z"/></svg></div><div class="logo-title">SIPELITA</div></div><div class="nav-links"><a class="nav-link" href="#f13">Dashboard</a></div></div><div class="nav-right"><div class="user-pill"><div class="avatar">NP</div> Nabila Putri</div></div></div>
+    <div class="page-head"><div class="crumbs"><a href="#f13">Dashboard</a> / Pengaturan Profil</div><h1>Pengaturan Profil</h1><p>Perbarui informasi profil dan kata sandi akun Anda.</p></div>
+    <div class="body">
+      <div class="card"><h2>Informasi Profil</h2><p class="sub">Data ini ditampilkan pada laporan yang Anda ajukan.</p>
+        <div class="grid2" style="gap:16px;margin-top:18px">
+          <div class="field"><label>Nama Lengkap</label><input value="Nabila Putri"></div>
+          <div class="field"><label>Email</label><input value="nabila@mahasiswa.ac.id"></div>
+          <div class="field"><label>NIM</label><input value="2023100421"></div>
+          <div class="field"><label>Program Studi</label><input value="Teknik Informatika"></div>
+        </div>
+        <button class="btn btn-primary" style="margin-top:18px">Simpan Perubahan</button>
+      </div>
+      <div class="card"><h2>Ubah Kata Sandi</h2><p class="sub">Gunakan kata sandi yang kuat dan mudah diingat.</p>
+        <div class="grid2" style="gap:16px;margin-top:18px">
+          <div class="field"><label>Kata Sandi Saat Ini</label><input type="password" value="password123"></div>
+          <div class="field"><label>Kata Sandi Baru</label><input type="password" value="rahasia123"></div>
+          <div class="field"><label>Konfirmasi Kata Sandi Baru</label><input type="password" value="rahasia123"></div>
+        </div>
+        <button class="btn btn-primary" style="margin-top:18px">Perbarui Kata Sandi</button>
+      </div>
+      <div class="card" style="border-color:#fecaca"><h2 style="color:#b91c1c">Hapus Akun</h2><p class="sub">Tindakan ini permanen dan tidak dapat dibatalkan.</p>
+        <button class="btn btn-danger" style="margin-top:14px">Hapus Akun Saya</button>
+      </div>
+    </div>
+    <div class="footer"><span>© 2026 SIPELITA</span><span>Halaman 17 dari 17</span></div>
+  </div>
+</section>
+
+</main>
+</body>
+</html>

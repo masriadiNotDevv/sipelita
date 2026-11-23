@@ -6,6 +6,7 @@ use App\Enums\PrioritasLaporan;
 use App\Enums\StatusLaporan;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreLaporanRequest;
+use App\LaporanWorkflow;
 use App\Models\Fasilitas;
 use App\Models\Kategori;
 use App\Models\Laporan;
@@ -65,7 +66,7 @@ class LaporanController extends Controller
     /**
      * Simpan laporan baru dari mahasiswa.
      */
-    public function store(StoreLaporanRequest $request): RedirectResponse
+    public function store(StoreLaporanRequest $request, LaporanWorkflow $workflow): RedirectResponse
     {
         $data = $request->safe()->except('bukti_foto');
 
@@ -79,6 +80,8 @@ class LaporanController extends Controller
 
         $laporan = auth()->user()->laporans()->create($data);
         $laporan->isiKode();
+
+        $workflow->dibuat($laporan, $request->user());
 
         return redirect()
             ->route('mahasiswa.laporan.show', $laporan)

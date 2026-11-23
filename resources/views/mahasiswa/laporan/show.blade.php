@@ -14,7 +14,7 @@
                 {{ $laporan->status->label() }}
             </span>
         </div>
-        <p class="mt-1 text-sm text-gray-500">Diajukan pada {{ $laporan->created_at?->format('d F Y \p\u\k\u\l j H:i') }}</p>
+        <p class="mt-1 text-sm text-gray-500">Diajukan pada {{ $laporan->created_at?->translatedFormat('d F Y H:i') }}</p>
     </x-slot>
 
     <div class="py-8">
@@ -94,7 +94,7 @@
                                         <span class="absolute -left-[7px] top-1.5 h-3 w-3 rounded-full bg-brand-500"></span>
                                         <div class="flex flex-wrap items-center gap-2">
                                             <p class="text-sm font-semibold text-gray-900">{{ $tanggapan->user?->name ?? 'Staff' }}</p>
-                                            <p class="text-xs text-gray-400">{{ $tanggapan->created_at?->format('d M Y H:i') }}</p>
+                                            <p class="text-xs text-gray-400">{{ $tanggapan->created_at?->translatedFormat('d M Y H:i') }}</p>
                                         </div>
                                         @if ($tanggapan->status_sebelum && $tanggapan->status_sesudah)
                                             <p class="mt-1 text-xs text-gray-500">
@@ -164,7 +164,7 @@
 
                         @if ($laporan->selesai_at)
                             <p class="mt-5 text-xs text-gray-500">
-                                Diselesaikan pada {{ $laporan->selesai_at->format('d F Y H:i') }}
+                                Diselesaikan pada {{ $laporan->selesai_at->translatedFormat('d F Y H:i') }}
                             </p>
                         @endif
                     </div>

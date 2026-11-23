@@ -12,7 +12,12 @@
 - [ ] Commit teratur dengan pesan jelas
 - [ ] Commit pertama teridentifikasi (hash + tanggal)
 - [ ] `git tag v1.0.0` setelah versi final
-- [ ] Wireframe/ERD/Flowchart disimpan (opsional tapi direkomendasikan)
+- [x] Wireframe/ERD/Flowchart disimpan: `figma-export/sipelita-canvas.html`, ERD dan
+      matriks kebijakan laporan di `ARCHITECTURE.md`
+- [x] Alur kerja laporan staff/admin dan notifikasi dicatat di `PROMPTS.md`,
+      `ARCHITECTURE.md`, dan `RIWAYAT-PENGEMBANGAN.md`
+- [ ] Commit dan push perubahan laporan staff/admin serta notifikasi ke
+      `origin/main` (belum dilakukan; HEAD terakhir yang dipush `ddbf629`)
 - [ ] Tidak ada kode copy-paste dari repo publik
 - [ ] Audit orisinalitas dilakukan
 
@@ -21,7 +26,8 @@
 - [x] `ARCHITECTURE.md` - arsitektur & struktur
 - [x] `README.md` - deskripsi, instalasi, lisensi
 - [x] `CHANGELOG.md` - riwayat perubahan per versi
-- [ ] Screenshot UI (minimal 3-5)
+- [x] `RIWAYAT-PENGEMBANGAN.md` - riwayat perubahan bertanggal
+- [ ] Screenshot UI (minimal 3-5); sumber wireframe tersedia di `figma-export/sipelita-canvas.html`
 - [ ] Deskripsi Ciptaan untuk DJKI (PDF)
 
 ## C. Kepatuhan Lisensi Pihak Ketiga
@@ -56,3 +62,8 @@
 
 ## Catatan
 Kepatuhan lisensi: Laravel MIT, Tailwind MIT, Google Icons Apache 2.0, Google Fonts OFL/Apache 2.0. Aman untuk pendaftaran HAKI.
+
+Sebelum commit dan push ke `origin/main`, jalankan `php artisan migrate --force`,
+`vendor/bin/pint --dirty --format agent`, `php artisan test --compact`, dan
+`npm.cmd run build`. Branch yang dipakai adalah `main`; HEAD sebelum pekerjaan
+laporan staff/admin dan notifikasi adalah `ddbf629` dan sudah dipush.

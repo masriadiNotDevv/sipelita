@@ -65,7 +65,7 @@ class LaporanMahasiswaTest extends TestCase
 
         $response->assertOk();
         $response->assertSee('Pintu Toilet Rusak');
-        $response->assertDontSee('Air Minum Mengalir');
+        $response->assertDontSee('Air Minum Tidak Mengalir');
         $response->assertViewHas('laporans', fn ($paginator) => $paginator->total() === 1);
     }
 

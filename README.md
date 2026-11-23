@@ -21,9 +21,18 @@ SIPELITA bertujuan untuk memfasilitasi proses pelaporan fasilitas kampus secara 
 - Role: `admin`, `staff`, `mahasiswa`
 - Dashboard berdasarkan role
 - Kelola staff (admin): tambah, edit, hapus, dan pencarian akun staff/admin
-- Kedepan: Form Pelaporan Fasilitas
-- Kedepan: Tracking Status Laporan
-- Kedepan: Manajemen Laporan & Tanggapan
+- Form pelaporan fasilitas (mahasiswa): judul, deskripsi, lokasi, kategori,
+  fasilitas opsional, prioritas, dan bukti foto JPG/PNG/WEBP maksimal 2 MB
+- Riwayat laporan (mahasiswa): pencarian, filter status, pagination, dan detail laporan
+- Manajemen laporan (staff): melihat semua laporan, mengklaim laporan yang belum
+  ditangani, serta mencatat tanggapan dan pembaruan status
+- Manajemen laporan (admin): melihat, mengedit, menugaskan penangani, memproses,
+  mengarsipkan (soft delete), dan memulihkan laporan tanpa penghapusan permanen
+- Status laporan bersifat bebas (semua `StatusLaporan` dapat dipilih kapan saja);
+  `selesai_at` hanya diisi ketika status `Selesai`
+- Notifikasi in-app berbasis database untuk admin, staff, dan pelapor atas
+  peristiwa dibuat, diklaim, ditugaskan, diproses/status, diedit, diarsipkan,
+  dan dipulihkan
 - Kedepan: Master Data (Kategori, Fasilitas, Lokasi)
 
 Rincian perubahan tersedia pada `CHANGELOG.md`.
@@ -129,3 +138,5 @@ Lihat [ATTRIBUTIONS.md](./ATTRIBUTIONS.md) dan [NOTICE](./NOTICE) untuk daftar p
 - [PROMPTS.md](./PROMPTS.md) - Daftar prompt yang digunakan
 - [ARCHITECTURE.md](./ARCHITECTURE.md) - Dokumentasi struktur & arsitektur
 - [BERKAS-HAKI.md](./BERKAS-HAKI.md) - Checklist pengajuan HAKI
+- [RIWAYAT-PENGEMBANGAN.md](./RIWAYAT-PENGEMBANGAN.md) - Riwayat perubahan bertanggal
+- [figma-export/sipelita-canvas.html](./figma-export/sipelita-canvas.html) - Canvas 17 frame untuk import Figma
